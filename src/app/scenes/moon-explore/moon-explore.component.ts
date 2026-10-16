@@ -30,6 +30,9 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       [style.opacity]="masterTimeline.getSceneVisibility(4).opacity"
       [attr.aria-label]="i18n.currentTranslations().missionsTitle"
     >
+      <!-- Deep Space Starfield Backdrop from User Upload -->
+      <div class="lunar-deep-space-backdrop" aria-hidden="true"></div>
+
       <!-- Fixed Sky: Earth Glowing in the Moon's Black Sky -->
       <div class="lunar-sky-fixed">
         <div class="celestial-earth">
@@ -251,10 +254,23 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       overflow: hidden;
     }
 
+    /* Deep Space Starfield Backdrop */
+    .lunar-deep-space-backdrop {
+      position: absolute;
+      inset: 0;
+      height: 65vh;
+      background-image: url('/assets/images/deep-space-stars.png');
+      background-size: cover;
+      background-position: center top;
+      opacity: 0.78;
+      pointer-events: none;
+      z-index: 1;
+    }
+
     /* Fixed Sky Earth */
     .lunar-sky-fixed {
       position: absolute;
-      top: 12%;
+      top: 10%;
       inset-inline-start: 10%;
       pointer-events: none;
       z-index: 2;
@@ -268,11 +284,14 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
     }
 
     .earth-crescent {
-      width: 64px;
-      height: 64px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #38BDF8, #1E3A8A 65%, #0A0E1C 100%);
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.45);
+      background-image: url('/assets/images/earth_realistic.jpg');
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.6), inset 0 0 15px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(112, 177, 237, 0.4);
     }
 
     .earth-telemetry {

@@ -237,7 +237,7 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
           <!-- Asyut Barrage Ground Photo Detail -->
           <div class="asyut-origin-preview">
             <div class="origin-thumb-wrapper">
-              <img src="/assets/images/asyut-nile-barrage.png" alt="قناطر أسيوط ونهر النيل" class="origin-thumb-img" />
+              <img src="assets/images/asyut_user_rocket_launch.png" alt="قناطر أسيوط ونهر النيل" class="origin-thumb-img" />
               <div class="origin-thumb-badge">
                 <span>📍 موقع الإطلاق: قناطر أسيوط · نهر النيل</span>
               </div>
@@ -399,18 +399,19 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
     .backdrop-image {
       width: 100%;
       height: 100%;
+      background-image: url('/assets/images/asyut_launch_realistic.jpg');
       background-size: cover;
-      background-position: center bottom;
-      opacity: 0.58;
-      filter: saturate(1.2) contrast(1.1);
-      transform: scale(1.02);
+      background-position: left center;
+      opacity: 1;
+      filter: contrast(1.05) brightness(1.02);
+      transform: scale(1.01);
     }
 
     .backdrop-vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 50%, transparent 40%, #0A0E1C 95%),
-                  linear-gradient(180deg, rgba(10, 14, 28, 0.4) 0%, transparent 40%, rgba(10, 14, 28, 0.85) 100%);
+      background: linear-gradient(270deg, rgba(10, 14, 28, 0.78) 0%, rgba(10, 14, 28, 0.35) 35%, transparent 65%),
+                  linear-gradient(180deg, rgba(10, 14, 28, 0.45) 0%, transparent 20%, transparent 80%, rgba(10, 14, 28, 0.6) 100%);
     }
 
     /* Asyut Barrage Thumbnail Preview */
@@ -456,32 +457,12 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
 
     /* Layer 2: Asyut Skyline */
     .skyline-layer {
-      z-index: 2;
-      display: flex;
-      align-items: flex-end;
-    }
-
-    .skyline-svg {
-      width: 100%;
-      height: 55vh;
-      display: block;
-    }
-
-    .beacon-blink {
-      animation: beaconFlash 1.2s infinite;
-    }
-
-    .beacon-blink-delay {
-      animation: beaconFlash 1.2s infinite 0.6s;
+      display: none;
     }
 
     /* Layer 3: Gantry & Rocket */
     .gantry-layer {
-      z-index: 3;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      bottom: 0;
+      display: none;
     }
 
     .pad-stage {
@@ -596,8 +577,8 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
       z-index: 10;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      padding: 6rem 3rem 3rem;
+      justify-content: flex-end;
+      padding: 6rem 4rem 3rem;
       pointer-events: none;
       transition: opacity 0.5s var(--ease-cinematic), transform 0.5s var(--ease-cinematic);
 

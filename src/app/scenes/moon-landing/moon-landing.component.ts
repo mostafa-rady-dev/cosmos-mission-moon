@@ -203,6 +203,10 @@ import { AudioService } from '../../core/audio.service';
       inset: 0;
       height: 60vh;
       pointer-events: none;
+      background-image: url('/assets/images/deep-space-stars.png');
+      background-size: cover;
+      background-position: center top;
+      opacity: 0.85;
     }
 
     .distant-earth {
@@ -216,11 +220,14 @@ import { AudioService } from '../../core/audio.service';
     }
 
     .earth-disc {
-      width: 48px;
-      height: 48px;
+      width: 58px;
+      height: 58px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #38BDF8, #1E3A8A 70%, #0A0E1C 100%);
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      background-image: url('/assets/images/earth_realistic.jpg');
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(112, 177, 237, 0.3);
     }
 
     .earth-tag {
