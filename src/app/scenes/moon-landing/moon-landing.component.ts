@@ -91,59 +91,13 @@ import { AudioService } from '../../core/audio.service';
 
       <!-- Lunar Lander / Rocket Descending -->
       <div #landerWrapper class="lander-craft-assembly">
-        <svg viewBox="0 0 160 220" class="lander-svg">
-          <defs>
-            <linearGradient id="landerBodyGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#E2E8F0"/>
-              <stop offset="50%" stop-color="#FFFFFF"/>
-              <stop offset="100%" stop-color="#94A3B8"/>
-            </linearGradient>
-            <linearGradient id="retroFlameGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#FFFFFF"/>
-              <stop offset="30%" stop-color="#FDE047"/>
-              <stop offset="70%" stop-color="#F97316"/>
-              <stop offset="100%" stop-color="#EF4444" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-
-          <!-- Retro-Thruster Exhaust Plume -->
-          <g #retroThrusters class="retro-thruster-group" [class.firing]="isRetroFiring()">
-            <polygon points="80,140 68,195 92,195" fill="url(#retroFlameGrad)" class="retro-flame"/>
-            <polygon points="62,138 52,175 70,175" fill="url(#retroFlameGrad)"/>
-            <polygon points="98,138 90,175 108,175" fill="url(#retroFlameGrad)"/>
-          </g>
-
-          <!-- Landing Legs (Animated Deployment) -->
-          <g #landingLegs class="landing-legs-group">
-            <!-- Left Leg Strut & Footpad -->
-            <path d="M52 120 L18 165 L10 168" stroke="#F2CA8D" stroke-width="3" stroke-linecap="round" fill="none"/>
-            <line x1="38" y1="138" x2="48" y2="155" stroke="#CBD5E1" stroke-width="2"/>
-            <ellipse cx="14" cy="168" rx="10" ry="3" fill="#64748B" stroke="#F2CA8D" stroke-width="1.5"/>
-
-            <!-- Right Leg Strut & Footpad -->
-            <path d="M108 120 L142 165 L150 168" stroke="#F2CA8D" stroke-width="3" stroke-linecap="round" fill="none"/>
-            <line x1="122" y1="138" x2="112" y2="155" stroke="#CBD5E1" stroke-width="2"/>
-            <ellipse cx="146" cy="168" rx="10" ry="3" fill="#64748B" stroke="#F2CA8D" stroke-width="1.5"/>
-          </g>
-
-          <!-- Lander Crew Capsule & Ascent Stage -->
-          <path d="M60 50 L70 15 Q80 10 90 15 L100 50 Z" fill="url(#landerBodyGrad)" stroke="#1E3A8A" stroke-width="1.5"/>
-          <circle cx="80" cy="34" r="5" fill="#2A71D6" stroke="#70B1ED" stroke-width="1.5"/>
-          
-          <!-- Mid Stage & Gold Foil Thermal Blanket -->
-          <rect x="52" y="50" width="56" height="55" fill="url(#landerBodyGrad)" stroke="#1E3A8A" stroke-width="1.5"/>
-          <rect x="52" y="62" width="56" height="18" fill="#F2CA8D"/>
-          <text x="80" y="74" fill="#0A0E1C" font-size="6" font-weight="900" font-family="'Space Mono', monospace" text-anchor="middle">ASYUT</text>
-          
-          <!-- Egyptian Emblem & Mission Flag -->
-          <rect x="68" y="85" width="24" height="4" fill="#EF4444"/>
-          <rect x="68" y="89" width="24" height="4" fill="#FFFFFF"/>
-          <rect x="68" y="93" width="24" height="4" fill="#0A0E1C"/>
-
-          <!-- Descent Stage Base & Engine Bell -->
-          <polygon points="50,105 110,105 118,135 42,135" fill="#1E293B" stroke="#F2CA8D" stroke-width="1.5"/>
-          <polygon points="72,135 66,145 94,145 88,135" fill="#475569" stroke="#70B1ED" stroke-width="1"/>
-        </svg>
+        <div class="realistic-lander-mount">
+          <img src="assets/images/lunar_lander_realistic.png" alt="Asyut Lunar Lander" class="lander-realistic-img" />
+          <div class="retro-thruster-exhaust" [class.firing]="isRetroFiring()">
+            <div class="retro-exhaust-beam"></div>
+            <div class="retro-exhaust-glow"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Touchdown Confirmation HUD Telemetry Banner -->
@@ -300,31 +254,64 @@ import { AudioService } from '../../core/audio.service';
       top: 15%;
       left: 50%;
       transform: translate(-50%, 0);
-      width: 160px;
+      width: 220px;
       height: 220px;
       z-index: 5;
       transform-origin: center center;
     }
 
-    .lander-svg {
+    .realistic-lander-mount {
+      position: relative;
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    .retro-thruster-group {
+    .lander-realistic-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: contrast(1.1) brightness(1.05) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.9));
+    }
+
+    .retro-thruster-exhaust {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 75px;
+      pointer-events: none;
       opacity: 0;
-      transform-origin: top center;
       transition: opacity 0.15s ease-in;
 
       &.firing {
         opacity: 1;
-        animation: retroFlicker 0.05s infinite alternate;
       }
     }
 
-    .retro-flame {
-      filter: drop-shadow(0 0 16px #F97316) drop-shadow(0 0 28px #FDE047);
+    .retro-exhaust-beam {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at top, #FFFFFF 0%, #FDE047 30%, #F97316 65%, transparent 100%);
+      filter: blur(5px);
+      mix-blend-mode: screen;
+      animation: plumeFlicker 0.05s infinite alternate;
+    }
+
+    .retro-exhaust-glow {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, rgba(249, 115, 22, 0.65) 0%, transparent 70%);
+      filter: blur(12px);
+      mix-blend-mode: screen;
     }
 
     /* Touchdown HUD Banner */

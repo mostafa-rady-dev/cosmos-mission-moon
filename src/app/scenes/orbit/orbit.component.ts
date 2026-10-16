@@ -104,20 +104,7 @@ import { AudioService } from '../../core/audio.service';
       <div #spacecraftWrapper class="spacecraft-container">
         <!-- Stage 1 Detached Booster (Tumbling Away) -->
         <div #boosterStage class="booster-stage">
-          <svg viewBox="0 0 60 220" class="booster-svg">
-            <rect x="10" y="0" width="40" height="180" rx="4" fill="#CBD5E1" stroke="#1E3A8A" stroke-width="1.5"/>
-            <!-- Interstage vents -->
-            <line x1="14" y1="20" x2="46" y2="20" stroke="#172130" stroke-width="3"/>
-            <!-- Egyptian Ribbon on booster -->
-            <rect x="25" y="40" width="10" height="30" fill="#EF4444"/>
-            <rect x="25" y="70" width="10" height="30" fill="#FFFFFF"/>
-            <rect x="25" y="100" width="10" height="30" fill="#0A0E1C"/>
-            <!-- Engine bells with diminishing embers -->
-            <polygon points="15,180 10,205 28,205 24,180" fill="#334155"/>
-            <polygon points="36,180 32,205 50,205 45,180" fill="#334155"/>
-            <!-- RCS Cold Gas Thruster Burst -->
-            <circle cx="10" cy="15" r="3" fill="#70B1ED" class="rcs-puff"/>
-          </svg>
+          <img src="assets/images/booster_realistic.png" alt="Spent Booster Stage" class="booster-realistic-img" />
         </div>
 
         <!-- Upper Stage 2 & Trans-Lunar Vehicle (Photorealistic Sustained Flight) -->
@@ -317,20 +304,17 @@ import { AudioService } from '../../core/audio.service';
     .booster-stage {
       position: relative;
       z-index: 1;
-      width: 60px;
-      height: 200px;
-      margin-top: -20px;
+      width: 130px;
+      height: 220px;
+      margin-top: -35px;
       transform-origin: top center;
     }
 
-    .booster-svg {
+    .booster-realistic-img {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.7));
-    }
-
-    .rcs-puff {
-      animation: rcsBurst 0.6s infinite ease-out;
+      object-fit: contain;
+      filter: contrast(1.1) brightness(1.05) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
     }
 
     /* Orbit HUD Card */

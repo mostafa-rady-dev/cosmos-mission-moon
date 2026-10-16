@@ -72,26 +72,12 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
           <line x1="1600" y1="300" x2="2000" y2="300" stroke="#64748B" stroke-width="1" stroke-dasharray="30 20" stroke-opacity="0.3"/>
         </svg>
 
-        <!-- Origin: Touchdown Base (Lander with Open Hatch & Ladder) -->
+        <!-- Origin: Touchdown Base (Realistic Lander with Open Warm Light & Ladder) -->
         <div class="lander-base-origin">
-          <svg viewBox="0 0 240 340" class="origin-lander-svg">
-            <!-- Lander Descent Stage -->
-            <polygon points="40,240 200,240 215,290 25,290" fill="#1E293B" stroke="#F2CA8D" stroke-width="2"/>
-            <!-- Golden Footpads -->
-            <ellipse cx="25" cy="295" rx="14" ry="5" fill="#64748B" stroke="#F2CA8D" stroke-width="1.5"/>
-            <ellipse cx="215" cy="295" rx="14" ry="5" fill="#64748B" stroke="#F2CA8D" stroke-width="1.5"/>
-            <!-- Cabin Body & Open Hatch -->
-            <rect x="50" y="100" width="140" height="140" rx="10" fill="#F1F5F9" stroke="#1E3A8A" stroke-width="2"/>
-            <!-- Open Hatch Door spilling warm light -->
-            <rect x="90" y="140" width="60" height="95" rx="8" fill="#0A0E1C" stroke="#F2CA8D" stroke-width="2"/>
-            <rect x="92" y="142" width="56" height="91" rx="6" fill="#FDE68A" class="hatch-light-spill"/>
-            <!-- Exit Ladder -->
-            <line x1="110" y1="235" x2="110" y2="295" stroke="#F2CA8D" stroke-width="3"/>
-            <line x1="130" y1="235" x2="130" y2="295" stroke="#F2CA8D" stroke-width="3"/>
-            <line x1="108" y1="250" x2="132" y2="250" stroke="#F2CA8D" stroke-width="2.5"/>
-            <line x1="108" y1="265" x2="132" y2="265" stroke="#F2CA8D" stroke-width="2.5"/>
-            <line x1="108" y1="280" x2="132" y2="280" stroke="#F2CA8D" stroke-width="2.5"/>
-          </svg>
+          <div class="origin-lander-wrapper">
+            <img src="assets/images/lunar_lander_realistic.png" alt="Touchdown Base Lander" class="origin-lander-realistic-img" />
+            <div class="hatch-glow-beacon"></div>
+          </div>
 
           <!-- Planted Egyptian Mission Flag -->
           <div #missionFlag class="planted-flag-wrapper" [class.flag-planted]="isFlagPlanted()">
@@ -131,53 +117,28 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
           [style.bottom.px]="astronautY()"
           [class.walking]="isWalking()"
         >
-          <svg viewBox="0 0 100 150" class="astronaut-svg">
-            <defs>
-              <linearGradient id="suitGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#E2E8F0"/>
-                <stop offset="50%" stop-color="#FFFFFF"/>
-                <stop offset="100%" stop-color="#94A3B8"/>
-              </linearGradient>
-              <linearGradient id="goldVisor" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#FDE68A"/>
-                <stop offset="45%" stop-color="#F59E0B"/>
-                <stop offset="100%" stop-color="#B45309"/>
-              </linearGradient>
-            </defs>
+          <div class="realistic-astronaut-mount">
+            <!-- Dynamic cast shadow under astronaut boots on lunar regolith -->
+            <div class="astronaut-ground-shadow" [class.walking]="isWalking()"></div>
 
-            <!-- Life Support Backpack (PLSS) -->
-            <rect x="25" y="42" width="22" height="52" rx="4" fill="#64748B" stroke="#1E293B" stroke-width="1.5"/>
-            <rect x="28" y="48" width="16" height="12" fill="#2A71D6" rx="2"/>
+            <!-- Lunar dust puff when walking -->
+            <div class="lunar-dust-puff left-puff" [class.active]="isWalking()"></div>
+            <div class="lunar-dust-puff right-puff" [class.active]="isWalking()"></div>
 
-            <!-- Legs & Boots (Low-gravity bounce) -->
-            <g class="legs-group">
-              <rect x="42" y="92" width="14" height="42" rx="6" fill="url(#suitGrad)" stroke="#1E293B" stroke-width="1.5" class="left-leg"/>
-              <ellipse cx="48" cy="138" rx="10" ry="5" fill="#475569" stroke="#F2CA8D" stroke-width="1"/>
-              
-              <rect x="58" y="92" width="14" height="42" rx="6" fill="url(#suitGrad)" stroke="#1E293B" stroke-width="1.5" class="right-leg"/>
-              <ellipse cx="66" cy="138" rx="10" ry="5" fill="#475569" stroke="#F2CA8D" stroke-width="1"/>
-            </g>
+            <!-- Realistic Astronaut Body Image (swaps between standing and walking pose) -->
+            <img 
+              [src]="isWalking() ? 'assets/images/astronaut_walking.png' : 'assets/images/astronaut_standing.png'" 
+              alt="Asyut Lunar Astronaut" 
+              class="astronaut-realistic-img" 
+              [class.stride-hop]="isWalking()"
+            />
 
-            <!-- Torso & Chest Pack -->
-            <rect x="38" y="40" width="38" height="55" rx="10" fill="url(#suitGrad)" stroke="#1E293B" stroke-width="1.5"/>
-            <!-- Chest Telemetry Controls -->
-            <rect x="46" y="52" width="22" height="18" rx="3" fill="#172130" stroke="#70B1ED" stroke-width="1"/>
-            <circle cx="52" cy="61" r="2.5" fill="#3EC87D"/>
-            <circle cx="62" cy="61" r="2.5" fill="#F2CA8D"/>
+            <!-- Helmet Visor Sunlight Glare Flare -->
+            <div class="visor-sun-flare"></div>
 
-            <!-- Arms -->
-            <rect x="32" y="45" width="10" height="38" rx="5" fill="url(#suitGrad)" stroke="#1E293B" stroke-width="1" class="left-arm"/>
-            <rect x="72" y="45" width="10" height="38" rx="5" fill="url(#suitGrad)" stroke="#1E293B" stroke-width="1" class="right-arm"/>
-
-            <!-- Helmet & Gold Visor with Glint -->
-            <g class="helmet-group">
-              <circle cx="57" cy="26" r="22" fill="url(#suitGrad)" stroke="#1E293B" stroke-width="2"/>
-              <!-- Visor Bubble -->
-              <ellipse cx="62" cy="26" rx="14" ry="12" fill="url(#goldVisor)" stroke="#1E293B" stroke-width="1.5"/>
-              <!-- Dynamic Visor Glint Reflection -->
-              <path d="M54 20 Q62 16 68 20" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.9"/>
-            </g>
-          </svg>
+            <!-- Helmet Headlamp Beam illuminating surface ahead -->
+            <div class="headlamp-beam"></div>
+          </div>
         </div>
 
         <!-- Dynamic Mission Nodes (Rendered from missions.config.ts) -->
@@ -345,14 +306,28 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       z-index: 3;
     }
 
-    .origin-lander-svg {
+    .origin-lander-wrapper {
+      position: relative;
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
     }
 
-    .hatch-light-spill {
-      filter: drop-shadow(0 0 16px #FDE68A);
+    .origin-lander-realistic-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: contrast(1.1) brightness(1.05) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.85));
+    }
+
+    .hatch-glow-beacon {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, rgba(253, 230, 138, 0.7) 0%, transparent 70%);
+      filter: blur(12px);
       animation: hatchPulse 2s infinite alternate;
     }
 
@@ -409,21 +384,99 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
     /* Walking Astronaut */
     .astronaut-character {
       position: absolute;
-      width: 75px;
-      height: 110px;
+      width: 95px;
+      height: 145px;
       z-index: 6;
       transform-origin: bottom center;
       transition: bottom 0.2s ease-out;
+      pointer-events: none;
+    }
 
-      &.walking {
-        animation: lowGravityHop 0.65s infinite alternate ease-in-out;
+    .realistic-astronaut-mount {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .astronaut-realistic-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: contrast(1.12) brightness(1.06) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.85));
+      transform-origin: bottom center;
+
+      &.stride-hop {
+        animation: lunarBoundLope 0.7s infinite alternate ease-in-out;
       }
     }
 
-    .astronaut-svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.75));
+    /* Dynamic ground shadow that shrinks and grows as astronaut bounds */
+    .astronaut-ground-shadow {
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 52px;
+      height: 10px;
+      background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.35) 50%, transparent 80%);
+      border-radius: 50%;
+      filter: blur(2px);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+
+      &.walking {
+        animation: shadowContract 0.7s infinite alternate ease-in-out;
+      }
+    }
+
+    /* Headlamp light cone illuminating lunar terrain ahead */
+    .headlamp-beam {
+      position: absolute;
+      top: 18px;
+      right: -35px;
+      width: 95px;
+      height: 40px;
+      background: radial-gradient(ellipse at left center, rgba(254, 240, 138, 0.35) 0%, rgba(254, 240, 138, 0.1) 40%, transparent 80%);
+      transform: rotate(20deg);
+      transform-origin: left center;
+      filter: blur(4px);
+      pointer-events: none;
+    }
+
+    /* Visor sun glint */
+    .visor-sun-flare {
+      position: absolute;
+      top: 15px;
+      right: 32px;
+      width: 8px;
+      height: 8px;
+      background: #FFFFFF;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #FFFFFF, 0 0 20px #F59E0B;
+      opacity: 0.85;
+      animation: visorGlint 3s infinite ease-in-out;
+    }
+
+    /* Lunar dust kickup */
+    .lunar-dust-puff {
+      position: absolute;
+      bottom: -2px;
+      width: 24px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(148, 163, 184, 0.5) 0%, transparent 70%);
+      filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+
+      &.active {
+        animation: dustKick 0.7s infinite ease-out;
+      }
+      &.left-puff { left: 15%; animation-delay: 0.05s; }
+      &.right-puff { right: 20%; animation-delay: 0.4s; }
     }
 
     /* Mission Waypoints along Surface */
@@ -596,9 +649,47 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       100% { opacity: 1; filter: drop-shadow(0 0 24px #FDE68A); }
     }
 
-    @keyframes lowGravityHop {
-      0% { transform: translateY(0) rotate(-2deg); }
-      100% { transform: translateY(-16px) rotate(2deg); }
+    @keyframes lunarBoundLope {
+      0% {
+        transform: translateY(0) rotate(-1.5deg);
+      }
+      50% {
+        transform: translateY(-16px) rotate(2deg);
+      }
+      100% {
+        transform: translateY(0) rotate(-1.5deg);
+      }
+    }
+
+    @keyframes shadowContract {
+      0% {
+        transform: translateX(-50%) scale(1);
+        opacity: 0.85;
+      }
+      50% {
+        transform: translateX(-50%) scale(0.65);
+        opacity: 0.35;
+      }
+      100% {
+        transform: translateX(-50%) scale(1);
+        opacity: 0.85;
+      }
+    }
+
+    @keyframes dustKick {
+      0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-14px) translateX(-10px) scale(1.6);
+        opacity: 0;
+      }
+    }
+
+    @keyframes visorGlint {
+      0%, 100% { opacity: 0.4; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
     }
 
     @keyframes beaconPing {
@@ -630,6 +721,8 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
 
   readonly completedCount = computed(() => this.completedMissions().size);
 
+  private scrollStopTimer: ReturnType<typeof setTimeout> | null = null;
+
   constructor() {
     effect(() => {
       const p = this.masterTimeline.getSceneProgress(4); // 0.0 to 1.0 within Scene 5 & 6
@@ -647,7 +740,11 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    if (this.scrollStopTimer) {
+      clearTimeout(this.scrollStopTimer);
+    }
+  }
 
   isMissionCompleted(id: string): boolean {
     return this.completedMissions().has(id);
@@ -679,6 +776,15 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
     // Astronaut walks forward ahead of camera center
     const targetX = 260 + p * (maxScrollX + 400);
     this.astronautX.set(targetX);
+
+    // Astronaut actively executes low-gravity walking bounds while scrolling
+    this.isWalking.set(true);
+    if (this.scrollStopTimer) {
+      clearTimeout(this.scrollStopTimer);
+    }
+    this.scrollStopTimer = setTimeout(() => {
+      this.isWalking.set(false);
+    }, 400);
 
     // Footprints trail generation as astronaut traverses
     const prints = this.footprints();

@@ -64,76 +64,16 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
 
           <!-- The Ascending Rocket Layer (Lifts off from the pad vertically into the sky) -->
           <div #ascendingRocket class="ascending-rocket-assembly" [class.ascending]="isIgnited()">
-            <!-- Precision Rocket Silhouette & Engine Bells -->
-            <div class="rocket-vehicle-body">
-              <svg viewBox="0 0 100 320" class="rocket-vector-vehicle">
-                <defs>
-                  <linearGradient id="bodyShine" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#E2E8F0"/>
-                    <stop offset="35%" stop-color="#FFFFFF"/>
-                    <stop offset="70%" stop-color="#CBD5E1"/>
-                    <stop offset="100%" stop-color="#64748B"/>
-                  </linearGradient>
-                  <linearGradient id="boosterShine" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#F8FAFC"/>
-                    <stop offset="50%" stop-color="#E2E8F0"/>
-                    <stop offset="100%" stop-color="#475569"/>
-                  </linearGradient>
-                  <linearGradient id="egyptRibbon" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#EF4444"/>
-                    <stop offset="33%" stop-color="#EF4444"/>
-                    <stop offset="34%" stop-color="#FFFFFF"/>
-                    <stop offset="66%" stop-color="#FFFFFF"/>
-                    <stop offset="67%" stop-color="#0A0E1C"/>
-                    <stop offset="100%" stop-color="#0A0E1C"/>
-                  </linearGradient>
-                  <linearGradient id="flameThrustGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#FFFFFF"/>
-                    <stop offset="15%" stop-color="#38BDF8"/>
-                    <stop offset="45%" stop-color="#F97316"/>
-                    <stop offset="85%" stop-color="#DC2626"/>
-                    <stop offset="100%" stop-color="#991B1B" stop-opacity="0"/>
-                  </linearGradient>
-                </defs>
-
-                <!-- Core Nose Cone & Egyptian Flag -->
-                <polygon points="50,10 32,70 68,70" fill="#FFFFFF" stroke="#0F172A" stroke-width="0.8"/>
-                <rect x="42" y="48" width="16" height="10" fill="url(#egyptRibbon)" stroke="#0F172A" stroke-width="0.4"/>
-                <text x="50" y="55" fill="#F2CA8D" font-size="4" font-weight="900" text-anchor="middle" font-family="'Space Mono', monospace">EGY</text>
-
-                <!-- Main Core Tank -->
-                <rect x="32" y="70" width="36" height="150" fill="url(#bodyShine)" stroke="#0F172A" stroke-width="0.8"/>
-                <!-- ASYUT text running down core -->
-                <text x="50" y="145" fill="#0A0E1C" font-size="9" font-weight="900" font-family="'Space Mono', monospace" text-anchor="middle" letter-spacing="2">ASYUT</text>
-                <line x1="32" y1="95" x2="68" y2="95" stroke="#0F172A" stroke-width="2"/>
-                <line x1="32" y1="165" x2="68" y2="165" stroke="#0F172A" stroke-width="2"/>
-
-                <!-- Left Strap-On Booster -->
-                <polygon points="20,70 12,105 28,105" fill="#FFFFFF" stroke="#0F172A" stroke-width="0.8"/>
-                <rect x="12" y="105" width="16" height="115" rx="3" fill="url(#boosterShine)" stroke="#0F172A" stroke-width="0.8"/>
-                <polygon points="12,220 8,235 28,235 24,220" fill="#334155"/>
-
-                <!-- Right Strap-On Booster -->
-                <polygon points="80,70 72,105 88,105" fill="#FFFFFF" stroke="#0F172A" stroke-width="0.8"/>
-                <rect x="72" y="105" width="16" height="115" rx="3" fill="url(#boosterShine)" stroke="#0F172A" stroke-width="0.8"/>
-                <polygon points="72,220 68,235 88,235 84,220" fill="#334155"/>
-
-                <!-- Center Main Engine Bells -->
-                <polygon points="36,220 32,238 68,238 64,220" fill="#1E293B"/>
-
-                <!-- Trailing Liftoff Fire Plumes -->
-                <g class="liftoff-fire-plumes">
-                  <!-- Left Booster Flame -->
-                  <polygon points="10,235 18,310 26,235" fill="url(#flameThrustGrad)" class="booster-flame-plume"/>
-                  <!-- Right Booster Flame -->
-                  <polygon points="70,235 78,310 86,235" fill="url(#flameThrustGrad)" class="booster-flame-plume"/>
-                  <!-- Core Center Blazing Jet -->
-                  <polygon points="32,238 50,335 68,238" fill="url(#flameThrustGrad)" class="main-core-plume"/>
-                  <!-- Inner Incandescent White-Cyan Mach Diamonds -->
-                  <ellipse cx="50" cy="255" rx="6" ry="8" fill="#FFFFFF"/>
-                  <ellipse cx="50" cy="280" rx="5" ry="7" fill="#38BDF8"/>
-                </g>
-              </svg>
+            <!-- Precision Photorealistic Launch Vehicle Assembly -->
+            <div class="realistic-heavy-rocket-body">
+              <img src="assets/images/heavy_rocket_realistic.png" alt="Asyut Heavy Launch Vehicle" class="heavy-rocket-realistic-img" />
+              <!-- Trailing Liftoff Fire Plumes -->
+              <div class="realistic-liftoff-fire-plumes" [class.ignited]="isIgnited()">
+                <div class="flame-core-jet"></div>
+                <div class="flame-side-booster left-booster"></div>
+                <div class="flame-side-booster right-booster"></div>
+                <div class="flame-glow-halo"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -213,84 +153,14 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
 
           <!-- Centered Rocket Assembly -->
           <div #rocketWrapper class="rocket-assembly">
-            <svg viewBox="0 0 160 520" class="rocket-svg-detailed">
-              <defs>
-                <linearGradient id="rocketBodyGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#E2E8F0"/>
-                  <stop offset="45%" stop-color="#FFFFFF"/>
-                  <stop offset="85%" stop-color="#CBD5E1"/>
-                  <stop offset="100%" stop-color="#94A3B8"/>
-                </linearGradient>
-                <linearGradient id="fairingGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#CBD5E1"/>
-                  <stop offset="50%" stop-color="#FFFFFF"/>
-                  <stop offset="100%" stop-color="#64748B"/>
-                </linearGradient>
-                <linearGradient id="goldAccent" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#F2CA8D"/>
-                  <stop offset="100%" stop-color="#D97706"/>
-                </linearGradient>
-                <linearGradient id="flameGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#FFFFFF"/>
-                  <stop offset="20%" stop-color="#FDE047"/>
-                  <stop offset="60%" stop-color="#F97316"/>
-                  <stop offset="100%" stop-color="#EF4444" stop-opacity="0"/>
-                </linearGradient>
-              </defs>
-
-              <!-- Escape Tower / Spike -->
-              <line x1="80" y1="10" x2="80" y2="50" stroke="#F2CA8D" stroke-width="3"/>
-              <polygon points="76,10 80,2 84,10" fill="#F2CA8D"/>
-
-              <!-- Command Module / Capsule (Stylized Egyptian Lotus Inlay) -->
-              <path d="M60 90 L70 50 Q80 44 90 50 L100 90 Z" fill="url(#fairingGrad)" stroke="#1E3A8A" stroke-width="1.5"/>
-              <circle cx="80" cy="70" r="5" fill="#2A71D6" stroke="#70B1ED" stroke-width="1.5"/>
-
-              <!-- Stage 2 / Trans-Lunar Injection Vehicle -->
-              <rect x="58" y="90" width="44" height="85" fill="url(#rocketBodyGrad)" stroke="#1E3A8A" stroke-width="1.5"/>
-              <!-- Golden Mission Band & Asyut Monogram -->
-              <rect x="58" y="105" width="44" height="12" fill="url(#goldAccent)"/>
-              <text x="80" y="114" fill="#0A0E1C" font-size="7" font-weight="900" font-family="'Space Mono', monospace" text-anchor="middle">ASYUT</text>
-              <line x1="62" y1="150" x2="98" y2="150" stroke="#2A71D6" stroke-width="2"/>
-
-              <!-- Interstage Ring -->
-              <rect x="56" y="175" width="48" height="15" fill="#172130" stroke="#70B1ED" stroke-width="1"/>
-              <line x1="60" y1="182" x2="100" y2="182" stroke="#F2CA8D" stroke-width="2" stroke-dasharray="4 3"/>
-
-              <!-- Main Booster Stage 1 Core -->
-              <rect x="54" y="190" width="52" height="230" fill="url(#rocketBodyGrad)" stroke="#1E3A8A" stroke-width="1.5"/>
-              <!-- Thermal Tiles & Aerodynamic Grid Fins -->
-              <rect x="46" y="210" width="8" height="20" fill="#172130" rx="2" stroke="#70B1ED" stroke-width="1"/>
-              <rect x="106" y="210" width="8" height="20" fill="#172130" rx="2" stroke="#70B1ED" stroke-width="1"/>
-              
-              <!-- Vertical Egyptian Flag Color Stripe (artistic ribbon) -->
-              <rect x="76" y="240" width="8" height="50" fill="#EF4444"/>
-              <rect x="76" y="290" width="8" height="50" fill="#FFFFFF"/>
-              <rect x="76" y="340" width="8" height="50" fill="#0A0E1C"/>
-              <!-- Falcon Crest Emblem -->
-              <circle cx="80" cy="315" r="3" fill="#F2CA8D"/>
-
-              <!-- Aerodynamic Base Fins -->
-              <polygon points="54,380 24,425 24,440 54,420" fill="#1E3A8A" stroke="#70B1ED" stroke-width="1.5"/>
-              <polygon points="106,380 136,425 136,440 106,420" fill="#1E3A8A" stroke="#70B1ED" stroke-width="1.5"/>
-
-              <!-- Engine Bells / Thruster Nozzles -->
-              <polygon points="60,420 54,448 72,448 68,420" fill="#334155" stroke="#70B1ED" stroke-width="1"/>
-              <polygon points="74,420 70,450 90,450 86,420" fill="#1E293B" stroke="#F2CA8D" stroke-width="1.5"/>
-              <polygon points="92,420 88,448 106,448 100,420" fill="#334155" stroke="#70B1ED" stroke-width="1"/>
-
-              <!-- Dynamic Animated Thruster Flame & Plume -->
-              <g #thrusterFlame class="thruster-flame-group" [class.ignited]="isIgnited()">
-                <!-- Core White Shock Diamonds -->
-                <polygon points="76,450 80,480 84,450" fill="#FFFFFF"/>
-                <polygon points="77,485 80,510 83,485" fill="#FFFFFF"/>
-                <!-- Flame Plume Core -->
-                <path d="M52 450 Q80 540 80 580 Q80 540 108 450 Z" fill="url(#flameGrad)" class="flame-core"/>
-                <!-- Side Nozzle Fire -->
-                <polygon points="54,448 63,495 72,448" fill="url(#flameGrad)"/>
-                <polygon points="88,448 97,495 106,448" fill="url(#flameGrad)"/>
-              </g>
-            </svg>
+            <div class="realistic-heavy-rocket-body">
+              <img src="assets/images/heavy_rocket_realistic.png" alt="Asyut Heavy Launch Vehicle" class="heavy-rocket-realistic-img" />
+              <div class="realistic-liftoff-fire-plumes" [class.ignited]="isIgnited()">
+                <div class="flame-core-jet"></div>
+                <div class="flame-side-booster left-booster"></div>
+                <div class="flame-side-booster right-booster"></div>
+              </div>
+            </div>
 
             <!-- Ground Smoke Clouds -->
             <div #smokeContainer class="smoke-container" [class.active]="isIgnited()">
@@ -575,53 +445,94 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
     .ascending-rocket-assembly {
       position: absolute;
       left: 21.8%;
-      top: 5.5%;
-      width: 8%;
-      min-width: 75px;
-      max-width: 130px;
-      height: 48vh;
+      top: 4.5%;
+      width: 9%;
+      min-width: 80px;
+      max-width: 135px;
+      height: 50vh;
       transform: translateX(-50%);
       transform-origin: center bottom;
       z-index: 5;
-      opacity: 0;
+      opacity: 1;
       pointer-events: none;
-      filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.6)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8));
-      transition: opacity 0.25s ease;
+      filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.85));
+      transition: filter 0.3s ease;
 
       &.ascending {
+        filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.7)) drop-shadow(0 25px 50px rgba(0, 0, 0, 0.9));
+      }
+    }
+
+    .realistic-heavy-rocket-body {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .heavy-rocket-realistic-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: contrast(1.1) brightness(1.05);
+    }
+
+    /* Trailing Liftoff Fire Plumes */
+    .realistic-liftoff-fire-plumes {
+      position: absolute;
+      bottom: -45px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 85px;
+      height: 95px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+
+      &.ignited {
         opacity: 1;
       }
     }
 
-    .rocket-vehicle-body {
-      width: 100%;
-      height: 100%;
-      position: relative;
+    .flame-core-jet {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 90px;
+      background: radial-gradient(ellipse at top, #FFFFFF 0%, #38BDF8 25%, #F97316 60%, transparent 95%);
+      filter: blur(4px);
+      mix-blend-mode: screen;
+      animation: corePlumeRoar 0.05s infinite alternate;
     }
 
-    .rocket-vector-vehicle {
-      width: 100%;
-      height: 100%;
-      display: block;
-      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
+    .flame-side-booster {
+      position: absolute;
+      top: 5px;
+      width: 18px;
+      height: 65px;
+      background: radial-gradient(ellipse at top, #FFFFFF 0%, #F97316 45%, #EF4444 80%, transparent 100%);
+      filter: blur(3px);
+      mix-blend-mode: screen;
+      animation: thrusterPuff 0.06s infinite alternate;
+
+      &.left-booster { left: 10%; }
+      &.right-booster { right: 10%; }
     }
 
-    /* Trailing Liftoff Fire Plumes */
-    .liftoff-fire-plumes {
-      opacity: 0.95;
-      filter: drop-shadow(0 0 25px #38BDF8) drop-shadow(0 0 50px #F97316);
-      transform-origin: top center;
-      animation: plumeFlicker 0.05s infinite alternate;
-    }
-
-    .booster-flame-plume {
-      transform-origin: top center;
-      animation: thrusterPuff 0.08s infinite alternate;
-    }
-
-    .main-core-plume {
-      transform-origin: top center;
-      animation: corePlumeRoar 0.06s infinite alternate;
+    .flame-glow-halo {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 110px;
+      background: radial-gradient(circle, rgba(249, 115, 22, 0.75) 0%, rgba(56, 189, 248, 0.35) 45%, transparent 75%);
+      filter: blur(16px);
+      mix-blend-mode: screen;
     }
 
     /* Active Launch Pad Flame Jet on Stand */
