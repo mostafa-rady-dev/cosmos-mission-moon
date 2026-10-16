@@ -20,6 +20,7 @@ import { LoaderComponent } from './ui/loader/loader.component';
 import { LanguageToggleComponent } from './ui/language-toggle/language-toggle.component';
 import { SoundToggleComponent } from './ui/sound-toggle/sound-toggle.component';
 import { LaunchPadComponent } from './scenes/launch/launch-pad.component';
+import { OrbitComponent } from './scenes/orbit/orbit.component';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +30,8 @@ import { LaunchPadComponent } from './scenes/launch/launch-pad.component';
     LoaderComponent,
     LanguageToggleComponent,
     SoundToggleComponent,
-    LaunchPadComponent
+    LaunchPadComponent,
+    OrbitComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',

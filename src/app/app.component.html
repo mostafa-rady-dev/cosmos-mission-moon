@@ -55,6 +55,15 @@
     >
       <app-launch-pad (launchCompleted)="onLaunchCompleted()"></app-launch-pad>
     </div>
+
+    <!-- Scene 2: Atmosphere & Orbit (Active in Phase 2: 15% - 30%) -->
+    <div 
+      class="scene-wrapper"
+      [class.scene-active]="masterTimeline.activeSceneIndex() === 1"
+      [style.opacity]="masterTimeline.getSceneVisibility(1).opacity"
+    >
+      <app-orbit></app-orbit>
+    </div>
   </main>
 
   <!-- Master Scroll Track Driving ScrollTrigger (600vh height for silky smooth travel) -->
