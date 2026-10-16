@@ -38,6 +38,12 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
         <div class="drifting-cloud cloud-2"></div>
       </div>
 
+      <!-- Photorealistic Asyut Barrage Launch Complex Backdrop -->
+      <div #realisticBackdrop class="realistic-asyut-backdrop" aria-hidden="true">
+        <div class="backdrop-image" style="background-image: url('/assets/images/asyut_launch_realistic.jpg');"></div>
+        <div class="backdrop-vignette"></div>
+      </div>
+
       <!-- Parallax Layer 2: Asyut Skyline & Space Complex Silhouette -->
       <div #skylineLayer class="parallax-layer skyline-layer">
         <svg viewBox="0 0 1920 600" class="skyline-svg" preserveAspectRatio="xMidYMax slice">
@@ -228,6 +234,16 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
           <h1 class="hero-title">{{ i18n.currentTranslations().launchTitle }}</h1>
           <p class="hero-desc">{{ i18n.currentTranslations().launchDesc }}</p>
 
+          <!-- Asyut Barrage Ground Photo Detail -->
+          <div class="asyut-origin-preview">
+            <div class="origin-thumb-wrapper">
+              <img src="/assets/images/asyut-nile-barrage.png" alt="قناطر أسيوط ونهر النيل" class="origin-thumb-img" />
+              <div class="origin-thumb-badge">
+                <span>📍 موقع الإطلاق: قناطر أسيوط · نهر النيل</span>
+              </div>
+            </div>
+          </div>
+
           <div class="flight-specs-row">
             <div class="spec-cell">
               <span class="spec-label">VEHICLE</span>
@@ -369,6 +385,73 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
       top: 45%;
       right: -15%;
       animation: driftRight 55s linear infinite alternate;
+    }
+
+    /* Realistic Asyut Barrage Backdrop */
+    .realistic-asyut-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .backdrop-image {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center bottom;
+      opacity: 0.58;
+      filter: saturate(1.2) contrast(1.1);
+      transform: scale(1.02);
+    }
+
+    .backdrop-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, transparent 40%, #0A0E1C 95%),
+                  linear-gradient(180deg, rgba(10, 14, 28, 0.4) 0%, transparent 40%, rgba(10, 14, 28, 0.85) 100%);
+    }
+
+    /* Asyut Barrage Thumbnail Preview */
+    .asyut-origin-preview {
+      margin-bottom: 1.25rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-line-strong);
+      background: rgba(10, 14, 28, 0.7);
+    }
+
+    .origin-thumb-wrapper {
+      position: relative;
+      width: 100%;
+      height: 95px;
+      overflow: hidden;
+    }
+
+    .origin-thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.95) contrast(1.05);
+      transition: transform 0.4s ease;
+
+      &:hover {
+        transform: scale(1.04);
+      }
+    }
+
+    .origin-thumb-badge {
+      position: absolute;
+      bottom: 0;
+      inset-inline-start: 0;
+      inset-inline-end: 0;
+      padding: 0.35rem 0.65rem;
+      background: linear-gradient(180deg, transparent, rgba(10, 14, 28, 0.95));
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent-sand);
+      font-weight: 700;
     }
 
     /* Layer 2: Asyut Skyline */
@@ -820,6 +903,7 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
   readonly sceneContainer = viewChild<ElementRef<HTMLElement>>('sceneContainer');
   readonly starfieldCanvas = viewChild<ElementRef<HTMLCanvasElement>>('starfieldCanvas');
   readonly skyLayer = viewChild<ElementRef<HTMLElement>>('skyLayer');
+  readonly realisticBackdrop = viewChild<ElementRef<HTMLElement>>('realisticBackdrop');
   readonly skylineLayer = viewChild<ElementRef<HTMLElement>>('skylineLayer');
   readonly gantryLayer = viewChild<ElementRef<HTMLElement>>('gantryLayer');
   readonly rocketWrapper = viewChild<ElementRef<HTMLElement>>('rocketWrapper');
@@ -931,6 +1015,14 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
     const hero = this.heroContent()?.nativeElement;
     const arm1 = this.umbilicalArm1()?.nativeElement;
     const arm2 = this.umbilicalArm2()?.nativeElement;
+    const backdrop = this.realisticBackdrop()?.nativeElement;
+
+    if (backdrop) {
+      gsap.set(backdrop, {
+        y: p * 160,
+        scale: 1 + p * 0.08,
+      });
+    }
 
     if (rocket) {
       gsap.set(rocket, {

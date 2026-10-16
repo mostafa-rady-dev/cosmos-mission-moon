@@ -30,6 +30,12 @@ import { AudioService } from '../../core/audio.service';
       <!-- Atmospheric Sky Gradient Transitioning to Cosmic Black -->
       <div #skyBg class="sky-gradient-layer"></div>
 
+      <!-- Photorealistic Stratosphere Ascent View (Egypt & Nile Curve) -->
+      <div #stratosphereLayer class="realistic-stratosphere-layer" aria-hidden="true">
+        <div class="stratosphere-image" style="background-image: url('/assets/images/rocket_stratosphere.jpg');"></div>
+        <div class="stratosphere-overlay"></div>
+      </div>
+
       <!-- High-altitude Clouds falling away -->
       <div #cloudLayer class="clouds-falling-layer">
         <div class="stratus-cloud c-1"></div>
@@ -201,6 +207,32 @@ import { AudioService } from '../../core/audio.service';
       inset: 0;
       background: linear-gradient(180deg, #030715 0%, #0A0E1C 50%, #161D39 100%);
       transition: background 1s ease;
+    }
+
+    /* Photorealistic Stratosphere Layer */
+    .realistic-stratosphere-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .stratosphere-image {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center center;
+      opacity: 0.68;
+      filter: saturate(1.15) contrast(1.1);
+      transform: scale(1.03);
+    }
+
+    .stratosphere-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, transparent 45%, #030715 95%),
+                  linear-gradient(180deg, rgba(3, 7, 21, 0.4) 0%, transparent 40%, rgba(3, 7, 21, 0.8) 100%);
     }
 
     /* Falling Clouds */
@@ -451,6 +483,7 @@ export class OrbitComponent implements OnInit, OnDestroy {
 
   readonly sceneContainer = viewChild<ElementRef<HTMLElement>>('sceneContainer');
   readonly skyBg = viewChild<ElementRef<HTMLElement>>('skyBg');
+  readonly stratosphereLayer = viewChild<ElementRef<HTMLElement>>('stratosphereLayer');
   readonly cloudLayer = viewChild<ElementRef<HTMLElement>>('cloudLayer');
   readonly earthHorizon = viewChild<ElementRef<HTMLElement>>('earthHorizon');
   readonly boosterStage = viewChild<ElementRef<HTMLElement>>('boosterStage');
@@ -482,11 +515,21 @@ export class OrbitComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   private applyProgressAnimation(p: number): void {
+    const stratosphere = this.stratosphereLayer()?.nativeElement;
     const clouds = this.cloudLayer()?.nativeElement;
     const earth = this.earthHorizon()?.nativeElement;
     const booster = this.boosterStage()?.nativeElement;
     const upper = this.upperStage()?.nativeElement;
     const telemetry = this.telemetryOverlay()?.nativeElement;
+
+    if (stratosphere) {
+      // Stratosphere view falls away downwards and fades out into deep space
+      gsap.set(stratosphere, {
+        y: p * 180,
+        opacity: Math.max(0, 0.7 - p * 0.8),
+        scale: 1 + p * 0.1,
+      });
+    }
 
     if (clouds) {
       // Clouds fall away downwards and fade out as rocket ascends
