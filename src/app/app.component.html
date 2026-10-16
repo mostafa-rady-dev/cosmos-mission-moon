@@ -45,65 +45,18 @@
     </div>
   </header>
 
-  <!-- Foundation Verification Stage (Phase 0 Showcase & Testing) -->
-  <main class="foundation-stage" id="main-content">
-    <div class="hud-panel foundation-card">
-      <div class="ticket-header">
-        <div class="passport-badge">
-          <span class="status-indicator"></span>
-          <span>PHASE 00 // FOUNDATION STATUS: ACTIVE</span>
-        </div>
-        <div class="stamp-pill">ASYUT · 2026</div>
-      </div>
-
-      <div class="card-body">
-        <h1 class="main-heading">{{ i18n.currentTranslations().siteTitle }}</h1>
-        <p class="main-subheading">{{ i18n.currentTranslations().launchDesc }}</p>
-
-        <!-- Technical Telemetry Grid -->
-        <div class="telemetry-grid">
-          <div class="telemetry-box">
-            <span class="box-label">CURRENT DIRECTION</span>
-            <span class="box-value">{{ i18n.dir().toUpperCase() }} ({{ i18n.currentLang() === 'ar' ? 'العربية' : 'English' }})</span>
-          </div>
-          <div class="telemetry-box">
-            <span class="box-label">LENIS SMOOTH SCROLL</span>
-            <span class="box-value accent-green">OPERATIONAL</span>
-          </div>
-          <div class="telemetry-box">
-            <span class="box-label">GSAP SCROLLTRIGGER</span>
-            <span class="box-value accent-blue">REGISTERED</span>
-          </div>
-          <div class="telemetry-box">
-            <span class="box-label">REDUCED MOTION</span>
-            <span class="box-value">{{ motionPrefs.prefersReducedMotion() ? 'ACTIVE' : 'DEFAULT (CINEMATIC)' }}</span>
-          </div>
-        </div>
-
-        <div class="callout-box">
-          <div class="callout-icon">🚀</div>
-          <div class="callout-text">
-            <strong>{{ i18n.currentTranslations().launchTitle }}</strong>
-            <p>{{ i18n.currentTranslations().loadingSub }}</p>
-          </div>
-        </div>
-
-        <!-- Language toggle test trigger -->
-        <div class="actions-row">
-          <button class="btn-cinema" (click)="i18n.toggleLanguage()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 12h16M12 4l8 8-8 8"/>
-            </svg>
-            <span>{{ i18n.currentTranslations().switchLang }}</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Passport Ticket Footer -->
-      <div class="ticket-footer">
-        <span class="ticket-id">MM-PASS-ASYUT-TO-MOON // 001-ALPHA</span>
-        <span class="ticket-agency">ASYUT SPACE WORKSPACE</span>
-      </div>
+  <!-- Pinned Master Viewport: All Scenes Live Here -->
+  <main class="cinematic-viewport" id="main-content">
+    <!-- Scene 1: Launch Pad (Active in Phase 1: 0% - 15%) -->
+    <div 
+      class="scene-wrapper"
+      [class.scene-active]="masterTimeline.activeSceneIndex() === 0"
+      [style.opacity]="masterTimeline.getSceneVisibility(0).opacity"
+    >
+      <app-launch-pad (launchCompleted)="onLaunchCompleted()"></app-launch-pad>
     </div>
   </main>
+
+  <!-- Master Scroll Track Driving ScrollTrigger (600vh height for silky smooth travel) -->
+  <div #masterTrack class="master-scroll-track" aria-hidden="true"></div>
 </div>
