@@ -316,28 +316,12 @@ export class LoaderComponent implements OnInit {
   }
 
   private startLoadingSimulation(): void {
-    let current = 0;
-    const interval = setInterval(() => {
-      current += Math.floor(Math.random() * 8) + 4;
-      if (current >= 100) {
-        current = 100;
-        clearInterval(interval);
-        this.progress.set(100);
-        this.ringOffset.set(0);
-        this.audio.playBeep(1200, 0.12);
-        // Automatically dismiss after a brief moment or allow user to click
-        setTimeout(() => {
-          this.dismiss();
-        }, 800);
-      } else {
-        this.progress.set(current);
-        const offset = 553 - (553 * current) / 100;
-        this.ringOffset.set(offset);
-        if (current % 20 < 6) {
-          this.audio.playBeep(600 + current * 4, 0.04);
-        }
-      }
-    }, 60);
+    // Quickly animate and dismiss so user immediately enters Planet Earth / Asyut Space Workspace
+    this.progress.set(100);
+    this.ringOffset.set(0);
+    setTimeout(() => {
+      this.dismiss();
+    }, 200);
   }
 
   dismiss(): void {

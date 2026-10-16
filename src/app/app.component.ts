@@ -88,14 +88,7 @@ export class App implements AfterViewInit, OnDestroy {
       end: 'bottom bottom',
       scrub: 1,
       onUpdate: (self) => {
-        const p = self.progress;
-        this.masterTimeline.updateProgress(p);
-
-        // First scroll automatically initiates launch sequence if on launch pad
-        if (p > 0.01 && !this.hasFirstScrolled) {
-          this.hasFirstScrolled = true;
-          this.launchPadRef()?.triggerLaunchSequence();
-        }
+        this.masterTimeline.updateProgress(self.progress);
       }
     });
   }

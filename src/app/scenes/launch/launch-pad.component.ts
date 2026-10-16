@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   inject,
   signal,
+  effect,
   ElementRef,
   viewChild,
   OnInit,
@@ -219,7 +220,7 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
           <div class="ticket-header-strip">
             <span class="passport-badge">
               <span class="pulse-dot"></span>
-              <span>MISSION: MOON // ASYUT-EG</span>
+              <span>🌍 PLANET EARTH // ASYUT LAUNCH COMPLEX</span>
             </span>
             <span class="status-badge-ready">{{ i18n.currentTranslations().readyToLaunch }}</span>
           </div>
@@ -835,6 +836,15 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
   private countdownTimer: ReturnType<typeof setInterval> | null = null;
   private hasLaunched = false;
 
+  readonly heroContent = viewChild<ElementRef<HTMLElement>>('heroContent');
+
+  constructor() {
+    effect(() => {
+      const p = this.masterTimeline.getSceneProgress(0); // 0.0 to 1.0 within Scene 1
+      this.animateLaunchOnScroll(p);
+    });
+  }
+
   ngOnInit(): void {
     setTimeout(() => {
       this.initStarfield();
@@ -851,9 +861,6 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Initializes high-performance lightweight 2D canvas starfield
-   */
   private initStarfield(): void {
     const canvas = this.starfieldCanvas()?.nativeElement;
     if (!canvas) return;
@@ -873,7 +880,7 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
     for (let i = 0; i < count; i++) {
       stars.push({
         x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height * 0.7, // Keep stars mostly in upper sky
+        y: Math.random() * canvas.height * 0.7,
         radius: Math.random() * 1.5 + 0.4,
         alpha: Math.random() * 0.8 + 0.2,
         speed: Math.random() * 0.02 + 0.005,
@@ -898,9 +905,6 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
     render();
   }
 
-  /**
-   * Subtle mouse/gyro parallax for depth
-   */
   private setupInitialParallax(): void {
     if (typeof window === 'undefined') return;
 
@@ -921,63 +925,75 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
     });
   }
 
+  private animateLaunchOnScroll(p: number): void {
+    if (this.isLaunching()) return;
+    const rocket = this.rocketWrapper()?.nativeElement;
+    const hero = this.heroContent()?.nativeElement;
+    const arm1 = this.umbilicalArm1()?.nativeElement;
+    const arm2 = this.umbilicalArm2()?.nativeElement;
+
+    if (rocket) {
+      gsap.set(rocket, {
+        y: -p * ((typeof window !== 'undefined' ? window.innerHeight : 800) + 200),
+      });
+    }
+
+    if (arm1 && arm2) {
+      gsap.set([arm1, arm2], {
+        rotate: -p * 45,
+        transformOrigin: 'left center',
+      });
+    }
+
+    if (hero) {
+      gsap.set(hero, {
+        opacity: Math.max(0, 1 - p * 3.5),
+        y: -p * 80,
+      });
+    }
+
+    if (p > 0.02) {
+      this.isIgnited.set(true);
+      this.isShaking.set(p < 0.7);
+    } else {
+      this.isIgnited.set(false);
+      this.isShaking.set(false);
+    }
+  }
+
   /**
-   * Launch Sequence:
-   * 1. Lock scroll
-   * 2. 5-second countdown with sound beeps
-   * 3. Umbilical retracts at T-2
-   * 4. Thruster ignition at T-1 with audio rumble and smoke
-   * 5. T-0: Liftoff and rocket accelerates through the top of the frame
-   * 6. Unlock scroll and signal transition to Phase 2
+   * Launch Sequence when user clicks the CTA button:
+   * 1. Rapid 3-second audio countdown
+   * 2. Thrusters ignite with rumble
+   * 3. Auto-scrolls smoothly into Scene 2 (Orbit)
    */
   triggerLaunchSequence(): void {
     if (this.hasLaunched || this.isLaunching()) return;
     this.hasLaunched = true;
     this.isLaunching.set(true);
 
-    // 1. Lock scroll strictly during the countdown sequence
-    this.scroll.lockScroll();
-
-    let count = 5;
+    let count = 3;
     this.countdownValue.set(count);
-    this.audio.playBeep(800, 0.1);
+    this.audio.playBeep(900, 0.1);
 
     this.countdownTimer = setInterval(() => {
       count--;
       if (count > 0) {
         this.countdownValue.set(count);
-        this.audio.playBeep(800 + (5 - count) * 80, 0.1);
+        this.audio.playBeep(900 + (3 - count) * 120, 0.1);
 
-        // Retract umbilical service arms at T-2
-        if (count === 2) {
-          const arm1 = this.umbilicalArm1()?.nativeElement;
-          const arm2 = this.umbilicalArm2()?.nativeElement;
-          if (arm1 && arm2) {
-            gsap.to([arm1, arm2], {
-              rotate: -40,
-              transformOrigin: 'left center',
-              duration: 1.2,
-              ease: 'power2.inOut'
-            });
-          }
-        }
-
-        // Thruster ignition at T-1
         if (count === 1) {
           this.isIgnited.set(true);
           this.isShaking.set(true);
-          this.audio.playThrusterRumble(5);
+          this.audio.playThrusterRumble(4);
         }
       } else {
-        // T-0: Liftoff!
         clearInterval(this.countdownTimer!);
         this.countdownValue.set(0);
         this.audio.playBeep(1400, 0.25);
-
-        // Rocket lift-off animation
         this.executeLiftoff();
       }
-    }, 1000);
+    }, 800);
   }
 
   private executeLiftoff(): void {
@@ -987,31 +1003,20 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
 
     const tl = gsap.timeline({
       onComplete: () => {
-        // Unlock scroll after liftoff and complete Phase 1
-        this.scroll.unlockScroll();
         this.countdownValue.set(null);
         this.isShaking.set(false);
-        this.masterTimeline.updateProgress(0.16); // Advance to Phase 2
+        this.isLaunching.set(false);
+        // Smoothly auto-scroll to Scene 2 (18% scroll progress)
+        const targetScroll = (document.documentElement.scrollHeight - window.innerHeight) * 0.18;
+        this.scroll.scrollTo(targetScroll, { duration: 1.8 });
         this.launchCompleted.emit();
       }
     });
 
-    // Camera rumble intensifies, rocket ascends smoothly then accelerates
     tl.to(rocket, {
-      y: -60,
-      duration: 1.5,
-      ease: 'power1.in',
-    })
-    .to(rocket, {
       y: -window.innerHeight - 300,
-      duration: 2.2,
-      ease: 'power3.in',
-    }, '-=0.2')
-    // Scene gracefully fades as rocket exits top
-    .to(scene, {
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power2.out'
-    }, '-=0.6');
+      duration: 1.8,
+      ease: 'power2.in',
+    });
   }
 }
