@@ -1,0 +1,55 @@
+:root {
+  /* Core Color Palette (from reference ydp.0xd22.dev/join) */
+  --bg-deep: #0A0E1C;
+  --bg-layer-1: #161D39;
+  --bg-surface: #0F1622;
+  --bg-raised: #172130;
+  
+  --accent-primary: #2A71D6; /* Cobalt */
+  --accent-glow: #70B1ED;    /* Azure */
+  --accent-sand: #F2CA8D;    /* Passport / Boarding Pass Gold */
+  --accent-ember: #F27636;   /* Thruster flame */
+  --accent-success: #3EC87D; /* Touchdown / Cleared */
+  --accent-danger: #F4514F;  /* Warning / Countdown */
+
+  --text-primary: #F9F5EC;   /* Paper white */
+  --text-muted: #A2AFC0;     /* Muted slate */
+  --text-faint: #6F7C8C;     /* Subtle technical telemetry */
+
+  --border-line: rgba(227, 232, 239, 0.12);
+  --border-line-strong: rgba(227, 232, 239, 0.28);
+  --border-accent: rgba(112, 177, 237, 0.35);
+
+  --glass-bg: rgba(15, 22, 34, 0.72);
+  --glass-bg-elevated: rgba(23, 33, 48, 0.85);
+  --glass-blur: blur(16px);
+  --hud-glow: 0 0 24px rgba(112, 177, 237, 0.22);
+
+  /* Typography */
+  --font-display-ar: 'Changa', 'Cairo', sans-serif;
+  --font-body-ar: 'Cairo', sans-serif;
+  --font-display-en: 'Bricolage Grotesque', sans-serif;
+  --font-body-en: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
+
+  /* Active Font Variables switched by direction */
+  --font-display: var(--font-display-ar);
+  --font-body: var(--font-body-ar);
+
+  /* Animation Easing */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* LTR overrides for English */
+[dir="ltr"] {
+  --font-display: var(--font-display-en);
+  --font-body: var(--font-body-en);
+}
+
+[dir="rtl"] {
+  --font-display: var(--font-display-ar);
+  --font-body: var(--font-body-ar);
+}
