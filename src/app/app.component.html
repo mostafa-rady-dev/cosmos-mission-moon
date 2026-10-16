@@ -64,6 +64,15 @@
     >
       <app-orbit></app-orbit>
     </div>
+
+    <!-- Scene 3: Solar System Flight (Active in Phase 3: 30% - 60%) -->
+    <div 
+      class="scene-wrapper"
+      [class.scene-active]="masterTimeline.activeSceneIndex() === 2"
+      [style.opacity]="masterTimeline.getSceneVisibility(2).opacity"
+    >
+      <app-solar-system></app-solar-system>
+    </div>
   </main>
 
   <!-- Master Scroll Track Driving ScrollTrigger (600vh height for silky smooth travel) -->

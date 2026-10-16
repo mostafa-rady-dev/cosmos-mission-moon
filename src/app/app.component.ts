@@ -21,6 +21,7 @@ import { LanguageToggleComponent } from './ui/language-toggle/language-toggle.co
 import { SoundToggleComponent } from './ui/sound-toggle/sound-toggle.component';
 import { LaunchPadComponent } from './scenes/launch/launch-pad.component';
 import { OrbitComponent } from './scenes/orbit/orbit.component';
+import { SolarSystemComponent } from './scenes/solar-system/solar-system.component';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,8 @@ import { OrbitComponent } from './scenes/orbit/orbit.component';
     LanguageToggleComponent,
     SoundToggleComponent,
     LaunchPadComponent,
-    OrbitComponent
+    OrbitComponent,
+    SolarSystemComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
