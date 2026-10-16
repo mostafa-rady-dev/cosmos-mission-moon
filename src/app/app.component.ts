@@ -22,6 +22,7 @@ import { SoundToggleComponent } from './ui/sound-toggle/sound-toggle.component';
 import { LaunchPadComponent } from './scenes/launch/launch-pad.component';
 import { OrbitComponent } from './scenes/orbit/orbit.component';
 import { SolarSystemComponent } from './scenes/solar-system/solar-system.component';
+import { MoonLandingComponent } from './scenes/moon-landing/moon-landing.component';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +34,8 @@ import { SolarSystemComponent } from './scenes/solar-system/solar-system.compone
     SoundToggleComponent,
     LaunchPadComponent,
     OrbitComponent,
-    SolarSystemComponent
+    SolarSystemComponent,
+    MoonLandingComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',

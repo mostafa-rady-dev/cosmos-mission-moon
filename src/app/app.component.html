@@ -73,6 +73,15 @@
     >
       <app-solar-system></app-solar-system>
     </div>
+
+    <!-- Scene 4: Moon Approach & Landing (Active in Phase 4: 60% - 75%) -->
+    <div 
+      class="scene-wrapper"
+      [class.scene-active]="masterTimeline.activeSceneIndex() === 3"
+      [style.opacity]="masterTimeline.getSceneVisibility(3).opacity"
+    >
+      <app-moon-landing></app-moon-landing>
+    </div>
   </main>
 
   <!-- Master Scroll Track Driving ScrollTrigger (600vh height for silky smooth travel) -->
