@@ -40,10 +40,16 @@
 
     <!-- Right (in LTR) / Left (in RTL): Controls (Sound + Lang) -->
     <div class="header-controls">
+      <button class="skip-btn" (click)="skipToMissions()">
+        {{ i18n.currentTranslations().skipToMissions }}
+      </button>
       <app-sound-toggle></app-sound-toggle>
       <app-language-toggle></app-language-toggle>
     </div>
   </header>
+
+  <!-- Phase 8: Vertical Side Progress Dock with Traveling Rocket -->
+  <app-progress-rocket></app-progress-rocket>
 
   <!-- Pinned Master Viewport: All Scenes Live Here -->
   <main class="cinematic-viewport" id="main-content">
@@ -82,7 +88,24 @@
     >
       <app-moon-landing></app-moon-landing>
     </div>
+
+    <!-- Scene 5 & 6: Astronaut Emerges & Moon Exploration (Active in Phase 5 & 6: 75% - 100%) -->
+    <div 
+      class="scene-wrapper"
+      [class.scene-active]="masterTimeline.activeSceneIndex() === 4"
+      [style.opacity]="masterTimeline.getSceneVisibility(4).opacity"
+      id="missions-section"
+    >
+      <app-moon-explore (openMission)="openMissionModal($event)"></app-moon-explore>
+    </div>
   </main>
+
+  <!-- Phase 7: HUD Helmet Visor Mission Modal -->
+  <app-hud-modal
+    [mission]="selectedMission()"
+    (closeModalEvent)="closeMissionModal()"
+    (missionCompletedEvent)="onMissionCompleted($event)"
+  ></app-hud-modal>
 
   <!-- Master Scroll Track Driving ScrollTrigger (600vh height for silky smooth travel) -->
   <div #masterTrack class="master-scroll-track" aria-hidden="true"></div>

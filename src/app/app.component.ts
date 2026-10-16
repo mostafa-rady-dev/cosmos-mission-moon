@@ -16,13 +16,19 @@ import { ScrollService } from './core/scroll.service';
 import { AudioService } from './core/audio.service';
 import { MotionPrefsService } from './core/motion-prefs.service';
 import { MasterTimelineService } from './core/master-timeline.service';
+import { MissionConfig } from '../assets/missions/missions.config';
+
 import { LoaderComponent } from './ui/loader/loader.component';
 import { LanguageToggleComponent } from './ui/language-toggle/language-toggle.component';
 import { SoundToggleComponent } from './ui/sound-toggle/sound-toggle.component';
+import { ProgressRocketComponent } from './ui/progress-rocket/progress-rocket.component';
+import { HudModalComponent } from './ui/hud-modal/hud-modal.component';
+
 import { LaunchPadComponent } from './scenes/launch/launch-pad.component';
 import { OrbitComponent } from './scenes/orbit/orbit.component';
 import { SolarSystemComponent } from './scenes/solar-system/solar-system.component';
 import { MoonLandingComponent } from './scenes/moon-landing/moon-landing.component';
+import { MoonExploreComponent } from './scenes/moon-explore/moon-explore.component';
 
 @Component({
   selector: 'app-root',
@@ -32,10 +38,13 @@ import { MoonLandingComponent } from './scenes/moon-landing/moon-landing.compone
     LoaderComponent,
     LanguageToggleComponent,
     SoundToggleComponent,
+    ProgressRocketComponent,
+    HudModalComponent,
     LaunchPadComponent,
     OrbitComponent,
     SolarSystemComponent,
-    MoonLandingComponent
+    MoonLandingComponent,
+    MoonExploreComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
@@ -49,9 +58,12 @@ export class App implements AfterViewInit, OnDestroy {
   protected readonly masterTimeline = inject(MasterTimelineService);
 
   readonly launchPadRef = viewChild<LaunchPadComponent>(LaunchPadComponent);
+  readonly moonExploreRef = viewChild<MoonExploreComponent>(MoonExploreComponent);
   readonly masterTrackRef = viewChild<ElementRef<HTMLElement>>('masterTrack');
 
   readonly isAppReady = signal<boolean>(false);
+  readonly selectedMission = signal<MissionConfig | null>(null);
+
   private masterScrollTrigger: ScrollTrigger | null = null;
   private hasFirstScrolled = false;
 
@@ -79,7 +91,7 @@ export class App implements AfterViewInit, OnDestroy {
         const p = self.progress;
         this.masterTimeline.updateProgress(p);
 
-        // First scroll automatically initiates launch sequence if not already launched
+        // First scroll automatically initiates launch sequence if on launch pad
         if (p > 0.01 && !this.hasFirstScrolled) {
           this.hasFirstScrolled = true;
           this.launchPadRef()?.triggerLaunchSequence();
@@ -93,13 +105,25 @@ export class App implements AfterViewInit, OnDestroy {
   }
 
   onLaunchCompleted(): void {
-    // Advance progress past Scene 1
     const targetScroll = (document.documentElement.scrollHeight - window.innerHeight) * 0.18;
-    this.scroll.scrollTo(targetScroll, { duration: 1 });
+    this.scroll.scrollTo(targetScroll, { duration: 1.2 });
+  }
+
+  openMissionModal(mission: MissionConfig): void {
+    this.selectedMission.set(mission);
+  }
+
+  closeMissionModal(): void {
+    this.selectedMission.set(null);
+  }
+
+  onMissionCompleted(missionId: string): void {
+    this.moonExploreRef()?.markCompleted(missionId);
+    this.closeMissionModal();
   }
 
   skipToMissions(): void {
-    const targetScroll = (document.documentElement.scrollHeight - window.innerHeight) * 0.8;
-    this.scroll.scrollTo(targetScroll, { duration: 1.2 });
+    const targetScroll = (document.documentElement.scrollHeight - window.innerHeight) * 0.78;
+    this.scroll.scrollTo(targetScroll, { duration: 1.5 });
   }
 }
