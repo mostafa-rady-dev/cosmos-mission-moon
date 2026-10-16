@@ -40,8 +40,103 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
 
       <!-- Photorealistic Asyut Barrage Launch Complex Backdrop -->
       <div #realisticBackdrop class="realistic-asyut-backdrop" aria-hidden="true">
-        <div class="backdrop-image" style="background-image: url('/assets/images/asyut_launch_realistic.jpg');"></div>
+        <div class="backdrop-image"></div>
         <div class="backdrop-vignette"></div>
+
+        <!-- Dynamic Launch Effects Anchored Directly to the Asyut Spit Rocket Pad -->
+        <div class="pad-dynamic-fx-container">
+          <!-- Ground Exhaust Smoke Billows that expand over the Nile & Barrage -->
+          <div #launchGroundSmoke class="ground-blast-smoke" [class.smoke-active]="isIgnited()">
+            <div class="smoke-cluster sc-1"></div>
+            <div class="smoke-cluster sc-2"></div>
+            <div class="smoke-cluster sc-3"></div>
+            <div class="smoke-cluster sc-4"></div>
+          </div>
+
+          <!-- Dynamic Water & Sand Heat Glow (Pulsing orange/gold on water) -->
+          <div class="water-heat-reflection" [class.heat-pulsing]="isIgnited()"></div>
+
+          <!-- Active Launch Pad Flame Jet on Stand -->
+          <div class="pad-ignition-burst" [class.burst-active]="isIgnited()">
+            <div class="fire-core-jet"></div>
+            <div class="fire-outer-flare"></div>
+          </div>
+
+          <!-- The Ascending Rocket Layer (Lifts off from the pad vertically into the sky) -->
+          <div #ascendingRocket class="ascending-rocket-assembly" [class.ascending]="isIgnited()">
+            <!-- Precision Rocket Silhouette & Engine Bells -->
+            <div class="rocket-vehicle-body">
+              <svg viewBox="0 0 100 320" class="rocket-vector-vehicle">
+                <defs>
+                  <linearGradient id="bodyShine" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#E2E8F0"/>
+                    <stop offset="35%" stop-color="#FFFFFF"/>
+                    <stop offset="70%" stop-color="#CBD5E1"/>
+                    <stop offset="100%" stop-color="#64748B"/>
+                  </linearGradient>
+                  <linearGradient id="boosterShine" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#F8FAFC"/>
+                    <stop offset="50%" stop-color="#E2E8F0"/>
+                    <stop offset="100%" stop-color="#475569"/>
+                  </linearGradient>
+                  <linearGradient id="egyptRibbon" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#EF4444"/>
+                    <stop offset="33%" stop-color="#EF4444"/>
+                    <stop offset="34%" stop-color="#FFFFFF"/>
+                    <stop offset="66%" stop-color="#FFFFFF"/>
+                    <stop offset="67%" stop-color="#0A0E1C"/>
+                    <stop offset="100%" stop-color="#0A0E1C"/>
+                  </linearGradient>
+                  <linearGradient id="flameThrustGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="15%" stop-color="#38BDF8"/>
+                    <stop offset="45%" stop-color="#F97316"/>
+                    <stop offset="85%" stop-color="#DC2626"/>
+                    <stop offset="100%" stop-color="#991B1B" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Core Nose Cone & Egyptian Flag -->
+                <polygon points="50,10 32,70 68,70" fill="#FFFFFF" stroke="#0F172A" stroke-width="0.8"/>
+                <rect x="42" y="48" width="16" height="10" fill="url(#egyptRibbon)" stroke="#0F172A" stroke-width="0.4"/>
+                <text x="50" y="55" fill="#F2CA8D" font-size="4" font-weight="900" text-anchor="middle" font-family="'Space Mono', monospace">EGY</text>
+
+                <!-- Main Core Tank -->
+                <rect x="32" y="70" width="36" height="150" fill="url(#bodyShine)" stroke="#0F172A" stroke-width="0.8"/>
+                <!-- ASYUT text running down core -->
+                <text x="50" y="145" fill="#0A0E1C" font-size="9" font-weight="900" font-family="'Space Mono', monospace" text-anchor="middle" letter-spacing="2">ASYUT</text>
+                <line x1="32" y1="95" x2="68" y2="95" stroke="#0F172A" stroke-width="2"/>
+                <line x1="32" y1="165" x2="68" y2="165" stroke="#0F172A" stroke-width="2"/>
+
+                <!-- Left Strap-On Booster -->
+                <polygon points="20,70 12,105 28,105" fill="#FFFFFF" stroke="#0F172A" stroke-width="0.8"/>
+                <rect x="12" y="105" width="16" height="115" rx="3" fill="url(#boosterShine)" stroke="#0F172A" stroke-width="0.8"/>
+                <polygon points="12,220 8,235 28,235 24,220" fill="#334155"/>
+
+                <!-- Right Strap-On Booster -->
+                <polygon points="80,70 72,105 88,105" fill="#FFFFFF" stroke="#0F172A" stroke-width="0.8"/>
+                <rect x="72" y="105" width="16" height="115" rx="3" fill="url(#boosterShine)" stroke="#0F172A" stroke-width="0.8"/>
+                <polygon points="72,220 68,235 88,235 84,220" fill="#334155"/>
+
+                <!-- Center Main Engine Bells -->
+                <polygon points="36,220 32,238 68,238 64,220" fill="#1E293B"/>
+
+                <!-- Trailing Liftoff Fire Plumes -->
+                <g class="liftoff-fire-plumes">
+                  <!-- Left Booster Flame -->
+                  <polygon points="10,235 18,310 26,235" fill="url(#flameThrustGrad)" class="booster-flame-plume"/>
+                  <!-- Right Booster Flame -->
+                  <polygon points="70,235 78,310 86,235" fill="url(#flameThrustGrad)" class="booster-flame-plume"/>
+                  <!-- Core Center Blazing Jet -->
+                  <polygon points="32,238 50,335 68,238" fill="url(#flameThrustGrad)" class="main-core-plume"/>
+                  <!-- Inner Incandescent White-Cyan Mach Diamonds -->
+                  <ellipse cx="50" cy="255" rx="6" ry="8" fill="#FFFFFF"/>
+                  <ellipse cx="50" cy="280" rx="5" ry="7" fill="#38BDF8"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Parallax Layer 2: Asyut Skyline & Space Complex Silhouette -->
@@ -465,6 +560,191 @@ import { MotionPrefsService } from '../../core/motion-prefs.service';
       display: none;
     }
 
+    /* Dynamic Launch FX Container Anchored to the Spit Pad */
+    .pad-dynamic-fx-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Ascending Rocket Assembly */
+    .ascending-rocket-assembly {
+      position: absolute;
+      left: 21.8%;
+      top: 5.5%;
+      width: 8%;
+      min-width: 75px;
+      max-width: 130px;
+      height: 48vh;
+      transform: translateX(-50%);
+      transform-origin: center bottom;
+      z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.6)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8));
+      transition: opacity 0.25s ease;
+
+      &.ascending {
+        opacity: 1;
+      }
+    }
+
+    .rocket-vehicle-body {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .rocket-vector-vehicle {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
+    }
+
+    /* Trailing Liftoff Fire Plumes */
+    .liftoff-fire-plumes {
+      opacity: 0.95;
+      filter: drop-shadow(0 0 25px #38BDF8) drop-shadow(0 0 50px #F97316);
+      transform-origin: top center;
+      animation: plumeFlicker 0.05s infinite alternate;
+    }
+
+    .booster-flame-plume {
+      transform-origin: top center;
+      animation: thrusterPuff 0.08s infinite alternate;
+    }
+
+    .main-core-plume {
+      transform-origin: top center;
+      animation: corePlumeRoar 0.06s infinite alternate;
+    }
+
+    /* Active Launch Pad Flame Jet on Stand */
+    .pad-ignition-burst {
+      position: absolute;
+      left: 21.8%;
+      top: 48%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 90px;
+      z-index: 4;
+      pointer-events: none;
+      opacity: 0.85;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+
+      &.burst-active {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.25);
+      }
+    }
+
+    .fire-core-jet {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 35px;
+      height: 80px;
+      background: radial-gradient(ellipse at top, #FFFFFF 0%, #38BDF8 30%, #F97316 70%, transparent 100%);
+      border-radius: 50% 50% 30% 30%;
+      filter: blur(3px) drop-shadow(0 0 25px #38BDF8) drop-shadow(0 0 45px #F97316);
+      animation: jetBlast 0.07s infinite alternate;
+    }
+
+    .fire-outer-flare {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 70px;
+      background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.8) 0%, rgba(220, 38, 38, 0.4) 50%, transparent 80%);
+      filter: blur(12px);
+      animation: flarePulse 0.1s infinite alternate;
+    }
+
+    /* Radiant Heat Illumination on Water & Sand */
+    .water-heat-reflection {
+      position: absolute;
+      left: 21.8%;
+      top: 50%;
+      transform: translateX(-50%);
+      width: 320px;
+      height: 200px;
+      background: radial-gradient(ellipse at 50% 30%, rgba(249, 115, 22, 0.75) 0%, rgba(245, 158, 11, 0.4) 45%, transparent 75%);
+      filter: blur(28px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 3;
+      animation: heatGlowPulse 0.1s infinite alternate;
+    }
+
+    /* Ground Exhaust Smoke Billows that expand over the Nile & Barrage */
+    .ground-blast-smoke {
+      position: absolute;
+      left: 22%;
+      top: 46%;
+      width: 260px;
+      height: 140px;
+      pointer-events: none;
+      z-index: 4;
+      transform-origin: left top;
+      opacity: 0.65;
+      transition: opacity 0.4s ease;
+
+      &.smoke-active {
+        opacity: 1;
+      }
+    }
+
+    .smoke-cluster {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(254, 215, 170, 0.6) 0%, rgba(148, 163, 184, 0.3) 50%, transparent 80%);
+      filter: blur(16px);
+      animation: smokeRoll 1.4s infinite ease-out;
+    }
+
+    .sc-1 { width: 140px; height: 90px; left: 20px; top: -10px; animation-delay: 0s; }
+    .sc-2 { width: 180px; height: 110px; left: 70px; top: 10px; animation-delay: 0.25s; }
+    .sc-3 { width: 220px; height: 130px; left: 130px; top: 0px; animation-delay: 0.5s; }
+    .sc-4 { width: 160px; height: 100px; left: 190px; top: 20px; animation-delay: 0.75s; }
+
+    @keyframes jetBlast {
+      0% { transform: translateX(-50%) scaleY(0.92) scaleX(0.95); opacity: 0.9; }
+      100% { transform: translateX(-50%) scaleY(1.08) scaleX(1.05); opacity: 1; }
+    }
+
+    @keyframes flarePulse {
+      0% { transform: translateX(-50%) scale(0.95); opacity: 0.75; }
+      100% { transform: translateX(-50%) scale(1.1); opacity: 0.95; }
+    }
+
+    @keyframes heatGlowPulse {
+      0% { opacity: 0.7; transform: translateX(-50%) scale(0.95); }
+      100% { opacity: 1; transform: translateX(-50%) scale(1.06); }
+    }
+
+    @keyframes smokeRoll {
+      0% { transform: translate(0, 0) scale(0.8); opacity: 0.8; }
+      100% { transform: translate(90px, -20px) scale(1.6); opacity: 0; }
+    }
+
+    @keyframes corePlumeRoar {
+      0% { transform: scaleY(0.94); }
+      100% { transform: scaleY(1.08); }
+    }
+
+    @keyframes thrusterPuff {
+      0% { transform: scaleY(0.92); opacity: 0.88; }
+      100% { transform: scaleY(1.1); opacity: 1; }
+    }
+
     .pad-stage {
       position: relative;
       width: 100%;
@@ -885,6 +1165,8 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
   readonly starfieldCanvas = viewChild<ElementRef<HTMLCanvasElement>>('starfieldCanvas');
   readonly skyLayer = viewChild<ElementRef<HTMLElement>>('skyLayer');
   readonly realisticBackdrop = viewChild<ElementRef<HTMLElement>>('realisticBackdrop');
+  readonly ascendingRocket = viewChild<ElementRef<HTMLElement>>('ascendingRocket');
+  readonly launchGroundSmoke = viewChild<ElementRef<HTMLElement>>('launchGroundSmoke');
   readonly skylineLayer = viewChild<ElementRef<HTMLElement>>('skylineLayer');
   readonly gantryLayer = viewChild<ElementRef<HTMLElement>>('gantryLayer');
   readonly rocketWrapper = viewChild<ElementRef<HTMLElement>>('rocketWrapper');
@@ -992,29 +1274,31 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
 
   private animateLaunchOnScroll(p: number): void {
     if (this.isLaunching()) return;
-    const rocket = this.rocketWrapper()?.nativeElement;
+    const ascending = this.ascendingRocket()?.nativeElement;
+    const groundSmoke = this.launchGroundSmoke()?.nativeElement;
     const hero = this.heroContent()?.nativeElement;
-    const arm1 = this.umbilicalArm1()?.nativeElement;
-    const arm2 = this.umbilicalArm2()?.nativeElement;
     const backdrop = this.realisticBackdrop()?.nativeElement;
 
     if (backdrop) {
       gsap.set(backdrop, {
-        y: p * 160,
-        scale: 1 + p * 0.08,
+        y: p * 140,
+        scale: 1 + p * 0.05,
       });
     }
 
-    if (rocket) {
-      gsap.set(rocket, {
-        y: -p * ((typeof window !== 'undefined' ? window.innerHeight : 800) + 200),
+    if (ascending) {
+      // The rocket accelerates and climbs directly out of the Asyut Barrage launch stand into the sky!
+      gsap.set(ascending, {
+        y: -p * ((typeof window !== 'undefined' ? window.innerHeight : 800) * 1.8),
+        scale: 1 + p * 0.15,
       });
     }
 
-    if (arm1 && arm2) {
-      gsap.set([arm1, arm2], {
-        rotate: -p * 45,
-        transformOrigin: 'left center',
+    if (groundSmoke) {
+      // Massive exhaust cloud billows over the launch pad and water as the rocket ascends
+      gsap.set(groundSmoke, {
+        scale: 1 + p * 3.5,
+        opacity: Math.max(0, 1 - p * 2),
       });
     }
 
@@ -1025,9 +1309,9 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
       });
     }
 
-    if (p > 0.02) {
+    if (p > 0.015) {
       this.isIgnited.set(true);
-      this.isShaking.set(p < 0.7);
+      this.isShaking.set(p < 0.65);
     } else {
       this.isIgnited.set(false);
       this.isShaking.set(false);
@@ -1038,7 +1322,8 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
    * Launch Sequence when user clicks the CTA button:
    * 1. Rapid 3-second audio countdown
    * 2. Thrusters ignite with rumble
-   * 3. Auto-scrolls smoothly into Scene 2 (Orbit)
+   * 3. Rocket lifts off from Asyut Barrage pad and climbs into the sky
+   * 4. Auto-scrolls smoothly into Scene 2 (Orbit)
    */
   triggerLaunchSequence(): void {
     if (this.hasLaunched || this.isLaunching()) return;
@@ -1058,7 +1343,7 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
         if (count === 1) {
           this.isIgnited.set(true);
           this.isShaking.set(true);
-          this.audio.playThrusterRumble(4);
+          this.audio.playThrusterRumble(5);
         }
       } else {
         clearInterval(this.countdownTimer!);
@@ -1070,26 +1355,40 @@ export class LaunchPadComponent implements OnInit, OnDestroy {
   }
 
   private executeLiftoff(): void {
-    const rocket = this.rocketWrapper()?.nativeElement;
+    const ascending = this.ascendingRocket()?.nativeElement;
+    const groundSmoke = this.launchGroundSmoke()?.nativeElement;
     const scene = this.sceneContainer()?.nativeElement;
-    if (!rocket || !scene) return;
+    if (!scene) return;
+
+    this.audio.playThrusterRumble(5);
 
     const tl = gsap.timeline({
       onComplete: () => {
         this.countdownValue.set(null);
         this.isShaking.set(false);
         this.isLaunching.set(false);
-        // Smoothly auto-scroll to Scene 2 (18% scroll progress)
+        // Smoothly auto-scroll to Scene 2 (Orbit)
         const targetScroll = (document.documentElement.scrollHeight - window.innerHeight) * 0.18;
         this.scroll.scrollTo(targetScroll, { duration: 1.8 });
         this.launchCompleted.emit();
       }
     });
 
-    tl.to(rocket, {
-      y: -window.innerHeight - 300,
-      duration: 1.8,
-      ease: 'power2.in',
-    });
+    if (ascending) {
+      tl.to(ascending, {
+        y: -window.innerHeight - 350,
+        duration: 2.0,
+        ease: 'power2.in',
+      });
+    }
+
+    if (groundSmoke) {
+      tl.to(groundSmoke, {
+        scale: 4,
+        opacity: 0,
+        duration: 2.0,
+        ease: 'power1.out',
+      }, '<');
+    }
   }
 }
