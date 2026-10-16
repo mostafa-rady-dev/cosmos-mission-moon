@@ -120,30 +120,10 @@ import { AudioService } from '../../core/audio.service';
           </svg>
         </div>
 
-        <!-- Upper Stage 2 & Trans-Lunar Vehicle (Sustained Flight) -->
-        <div #upperStage class="upper-stage">
-          <svg viewBox="0 0 60 180" class="upper-stage-svg">
-            <defs>
-              <linearGradient id="orbitFlameGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#FFFFFF"/>
-                <stop offset="25%" stop-color="#70B1ED"/>
-                <stop offset="65%" stop-color="#2A71D6"/>
-                <stop offset="100%" stop-color="#1E3A8A" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <!-- Nose Cone & Crew Visor Window -->
-            <polygon points="30,5 15,45 45,45" fill="#E2E8F0" stroke="#1E3A8A" stroke-width="1.5"/>
-            <circle cx="30" cy="32" r="4.5" fill="#2A71D6" stroke="#70B1ED" stroke-width="1.5"/>
-            <!-- Service Module Body -->
-            <rect x="15" y="45" width="30" height="75" fill="#F8FAFC" stroke="#1E3A8A" stroke-width="1.5"/>
-            <!-- Gold Foil Accent Band -->
-            <rect x="15" y="58" width="30" height="12" fill="#F2CA8D"/>
-            <text x="30" y="67" fill="#0A0E1C" font-size="5" font-weight="900" font-family="'Space Mono', monospace" text-anchor="middle">ASYUT</text>
-            <!-- High-efficiency Vacuum Engine Bell -->
-            <polygon points="22,120 16,145 44,145 38,120" fill="#1E293B" stroke="#70B1ED" stroke-width="1.5"/>
-            <!-- Blue/Cyan Ion / Vacuum Thruster Glow -->
-            <path d="M18 145 Q30 200 30 230 Q30 200 42 145 Z" fill="url(#orbitFlameGrad)" class="vacuum-plume"/>
-          </svg>
+        <!-- Upper Stage 2 & Trans-Lunar Vehicle (Photorealistic Sustained Flight) -->
+        <div #upperStage class="upper-stage realistic-orbit-stage">
+          <img src="assets/images/cruiser_realistic.png" alt="Realistic Upper Stage" class="orbit-craft-img" />
+          <div class="orbit-thruster-beam"></div>
         </div>
       </div>
 
@@ -306,19 +286,32 @@ import { AudioService } from '../../core/audio.service';
     .upper-stage {
       position: relative;
       z-index: 2;
-      width: 60px;
-      height: 180px;
+      width: 140px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .upper-stage-svg {
+    .orbit-craft-img {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.8));
+      object-fit: contain;
+      transform: rotate(-90deg);
+      filter: contrast(1.1) brightness(1.05) drop-shadow(0 0 15px rgba(56, 189, 248, 0.4));
     }
 
-    .vacuum-plume {
-      animation: plumeFlicker 0.08s infinite alternate;
-      filter: drop-shadow(0 0 16px #38BDF8) drop-shadow(0 0 32px #1E3A8A);
+    .orbit-thruster-beam {
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 45px;
+      height: 75px;
+      background: radial-gradient(ellipse at top, #FFFFFF 0%, #38BDF8 35%, #2A71D6 70%, transparent 100%);
+      filter: blur(8px);
+      mix-blend-mode: screen;
+      animation: plumeFlicker 0.06s infinite alternate;
     }
 
     .booster-stage {

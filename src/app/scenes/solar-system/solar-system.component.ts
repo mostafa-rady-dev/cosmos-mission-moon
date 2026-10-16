@@ -115,7 +115,7 @@ interface PlanetInfo {
       <!-- 4. Planet Saturn (Golden Rings) -->
       <div #saturnPlanet class="celestial-body planet-saturn">
         <div class="saturn-system">
-          <img src="/assets/images/saturn_realistic.jpg" alt="Planet Saturn" class="saturn-realistic-img" />
+          <img src="assets/images/saturn_realistic.png" alt="Planet Saturn" class="saturn-realistic-img" />
         </div>
         <div class="planet-label-glass hud-panel" [class.label-visible]="activePlanet() === 'saturn'">
           <span class="planet-title">{{ i18n.currentTranslations().planetSaturn }}</span>
@@ -135,35 +135,12 @@ interface PlanetInfo {
         </div>
       </div>
 
-      <!-- Trans-Lunar Rocket Cruiser Following Motion Path -->
+      <!-- Trans-Lunar Realistic Spacecraft Cruiser Following Motion Path -->
       <div #rocketShip class="cruising-rocket">
-        <svg viewBox="0 0 120 70" class="cruiser-svg">
-          <defs>
-            <linearGradient id="cruiserBodyGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#FFFFFF"/>
-              <stop offset="60%" stop-color="#CBD5E1"/>
-              <stop offset="100%" stop-color="#64748B"/>
-            </linearGradient>
-            <linearGradient id="ionFlame" x1="0" y1="0.5" x2="1" y2="0.5">
-              <stop offset="0%" stop-color="#38BDF8" stop-opacity="0"/>
-              <stop offset="60%" stop-color="#70B1ED"/>
-              <stop offset="100%" stop-color="#FFFFFF"/>
-            </linearGradient>
-          </defs>
-
-          <!-- Ion Thruster Flame Tail (extends behind rocket) -->
-          <polygon points="0,35 45,28 45,42" fill="url(#ionFlame)" class="ion-plume"/>
-          <!-- Rocket Body Horizontal Orient -->
-          <path d="M40 28 L95 24 Q115 35 95 46 L40 42 Z" fill="url(#cruiserBodyGrad)" stroke="#1E3A8A" stroke-width="1.5"/>
-          <!-- Cabin Visor Window -->
-          <ellipse cx="92" cy="35" rx="5" ry="3.5" fill="#2A71D6" stroke="#70B1ED" stroke-width="1"/>
-          <!-- Golden Mission Inscription -->
-          <rect x="62" y="32" width="22" height="6" fill="#F2CA8D"/>
-          <text x="73" y="36.5" fill="#0A0E1C" font-size="3.5" font-weight="900" font-family="'Space Mono', monospace" text-anchor="middle">ASYUT</text>
-          <!-- Banking Swept Solar Fins -->
-          <polygon points="50,28 35,12 55,26" fill="#1E3A8A" stroke="#70B1ED" stroke-width="1"/>
-          <polygon points="50,42 35,58 55,44" fill="#1E3A8A" stroke="#70B1ED" stroke-width="1"/>
-        </svg>
+        <div class="realistic-cruiser-wrapper">
+          <img src="assets/images/cruiser_realistic.png" alt="Asyut Deep Space Cruiser" class="cruiser-realistic-img" />
+          <div class="engine-thrust-glow"></div>
+        </div>
       </div>
 
       <!-- Top Route HUD Card -->
@@ -302,24 +279,46 @@ interface PlanetInfo {
       pointer-events: none;
     }
 
-    /* Cruising Rocket */
+    /* Cruising Realistic Spacecraft */
     .cruising-rocket {
       position: absolute;
-      width: 130px;
-      height: 70px;
+      width: 250px;
+      height: 140px;
       z-index: 5;
-      transform-origin: center center;
-      filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.7));
+      transform-origin: 65% 50%;
+      pointer-events: none;
+      filter: drop-shadow(0 0 25px rgba(56, 189, 248, 0.4));
     }
 
-    .cruiser-svg {
+    .realistic-cruiser-wrapper {
+      position: relative;
       width: 100%;
       height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .ion-plume {
+    .cruiser-realistic-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: contrast(1.1) brightness(1.05) drop-shadow(0 0 15px rgba(56, 189, 248, 0.45));
+      transform: scale(1.05);
+    }
+
+    .engine-thrust-glow {
+      position: absolute;
+      left: 10%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.95) 0%, rgba(42, 113, 214, 0.5) 45%, transparent 75%);
+      filter: blur(12px);
+      mix-blend-mode: screen;
+      pointer-events: none;
       animation: ionThrust 0.08s infinite alternate;
-      filter: drop-shadow(0 0 12px #38BDF8) drop-shadow(0 0 24px #2A71D6);
     }
 
     /* Celestial Bodies */
@@ -419,7 +418,7 @@ interface PlanetInfo {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      mix-blend-mode: screen;
+      filter: contrast(1.05) brightness(1.02);
       transform: rotate(4deg);
     }
 
