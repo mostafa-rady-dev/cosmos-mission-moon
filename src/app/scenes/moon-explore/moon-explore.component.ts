@@ -117,7 +117,7 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
           [style.bottom.px]="astronautY()"
           [class.walking]="isWalking()"
         >
-          <div class="realistic-astronaut-mount">
+          <div class="realistic-astronaut-mount" [class.stride-hop]="isWalking()">
             <!-- Dynamic cast shadow under astronaut boots on lunar regolith -->
             <div class="astronaut-ground-shadow" [class.walking]="isWalking()"></div>
 
@@ -125,12 +125,24 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
             <div class="lunar-dust-puff left-puff" [class.active]="isWalking()"></div>
             <div class="lunar-dust-puff right-puff" [class.active]="isWalking()"></div>
 
-            <!-- Realistic Astronaut Body Image (swaps between standing and walking pose) -->
+            <!-- Alternating Two-Legged Astronaut Walk Cycle Sprites -->
             <img 
-              [src]="isWalking() ? 'assets/images/astronaut_walking.png' : 'assets/images/astronaut_standing.png'" 
-              alt="Asyut Lunar Astronaut" 
+              src="assets/images/astronaut_standing.png" 
+              alt="Asyut Lunar Astronaut - Standing" 
               class="astronaut-realistic-img" 
-              [class.stride-hop]="isWalking()"
+              [class.active-pose]="activePose() === 'stand'"
+            />
+            <img 
+              src="assets/images/astronaut_walking.png" 
+              alt="Asyut Lunar Astronaut - Right Step" 
+              class="astronaut-realistic-img" 
+              [class.active-pose]="activePose() === 'stride-right'"
+            />
+            <img 
+              src="assets/images/astronaut_walking_alt.png" 
+              alt="Asyut Lunar Astronaut - Left Step" 
+              class="astronaut-realistic-img" 
+              [class.active-pose]="activePose() === 'stride-left'"
             />
 
             <!-- Helmet Visor Sunlight Glare Flare -->
@@ -400,21 +412,37 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
+      transform-origin: bottom center;
+
+      &.stride-hop {
+        animation: naturalLunarLope 1.35s infinite ease-in-out;
+      }
     }
 
     .astronaut-realistic-img {
+      position: absolute;
+      bottom: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       object-fit: contain;
       filter: contrast(1.12) brightness(1.06) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.85));
       transform-origin: bottom center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.06s ease-in-out;
 
-      &.stride-hop {
-        animation: lunarBoundLope 0.7s infinite alternate ease-in-out;
+      &.active-pose {
+        opacity: 1;
+        visibility: visible;
       }
     }
 
-    /* Dynamic ground shadow that shrinks and grows as astronaut bounds */
+    .realistic-astronaut-mount:not(.stride-hop) .astronaut-realistic-img.active-pose {
+      animation: idleBreathing 3.5s infinite ease-in-out;
+    }
+
+    /* Dynamic ground shadow that naturally detaches, shrinks, and soft-blurs during low-gravity float */
     .astronaut-ground-shadow {
       position: absolute;
       bottom: -6px;
@@ -422,13 +450,13 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       transform: translateX(-50%);
       width: 52px;
       height: 10px;
-      background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.35) 50%, transparent 80%);
+      background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.35) 50%, transparent 80%);
       border-radius: 50%;
       filter: blur(2px);
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      transition: opacity 0.2s ease;
 
       &.walking {
-        animation: shadowContract 0.7s infinite alternate ease-in-out;
+        animation: naturalShadowLope 1.35s infinite ease-in-out;
       }
     }
 
@@ -460,23 +488,26 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       animation: visorGlint 3s infinite ease-in-out;
     }
 
-    /* Lunar dust kickup */
+    /* Natural Lunar dust kickup alternating with stride */
     .lunar-dust-puff {
       position: absolute;
       bottom: -2px;
-      width: 24px;
-      height: 12px;
+      width: 26px;
+      height: 14px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(148, 163, 184, 0.5) 0%, transparent 70%);
-      filter: blur(3px);
+      background: radial-gradient(circle, rgba(148, 163, 184, 0.55) 0%, rgba(100, 116, 139, 0.2) 60%, transparent 80%);
+      filter: blur(3.5px);
       opacity: 0;
       pointer-events: none;
 
-      &.active {
-        animation: dustKick 0.7s infinite ease-out;
+      &.active.left-puff {
+        animation: naturalDustKickLeft 1.35s infinite ease-out;
+        left: 20%;
       }
-      &.left-puff { left: 15%; animation-delay: 0.05s; }
-      &.right-puff { right: 20%; animation-delay: 0.4s; }
+      &.active.right-puff {
+        animation: naturalDustKickRight 1.35s infinite ease-out;
+        right: 25%;
+      }
     }
 
     /* Mission Waypoints along Surface */
@@ -649,40 +680,131 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       100% { opacity: 1; filter: drop-shadow(0 0 24px #FDE68A); }
     }
 
-    @keyframes lunarBoundLope {
-      0% {
-        transform: translateY(0) rotate(-1.5deg);
+    @keyframes idleBreathing {
+      0%, 100% {
+        transform: translateY(0) scale(1);
       }
       50% {
-        transform: translateY(-16px) rotate(2deg);
-      }
-      100% {
-        transform: translateY(0) rotate(-1.5deg);
+        transform: translateY(-2px) scale(1.008);
       }
     }
 
-    @keyframes shadowContract {
+    @keyframes naturalLunarLope {
+      /* Phase 1: Push off from lunar ground */
       0% {
-        transform: translateX(-50%) scale(1);
-        opacity: 0.85;
+        transform: translateY(0px) rotate(3deg) scaleY(0.96);
       }
-      50% {
-        transform: translateX(-50%) scale(0.65);
+      /* Spring upwards */
+      14% {
+        transform: translateY(-8px) rotate(6deg) scaleY(1.02);
+      }
+      /* Apex of float in 1/6th gravity (graceful hang time) */
+      38% {
+        transform: translateY(-26px) rotate(2deg) scaleY(1);
+      }
+      /* Smooth descent */
+      54% {
+        transform: translateY(-10px) rotate(4deg) scaleY(1);
+      }
+      /* Touchdown on surface & knee absorption */
+      62% {
+        transform: translateY(0px) rotate(3.5deg) scaleY(0.96);
+      }
+      /* Phase 2: Second foot push-off & counter-weight bound */
+      74% {
+        transform: translateY(-8px) rotate(5.5deg) scaleY(1.02);
+      }
+      /* Second apex float */
+      87% {
+        transform: translateY(-24px) rotate(1.5deg) scaleY(1);
+      }
+      /* Soft landing back on surface */
+      96% {
+        transform: translateY(-2px) rotate(3deg) scaleY(0.98);
+      }
+      100% {
+        transform: translateY(0px) rotate(3deg) scaleY(0.96);
+      }
+    }
+
+    @keyframes naturalShadowLope {
+      0% {
+        transform: translateX(-50%) scale(1.05, 1);
+        opacity: 0.9;
+        filter: blur(2px);
+      }
+      14% {
+        transform: translateX(-50%) scale(0.9, 0.9);
+        opacity: 0.75;
+        filter: blur(3px);
+      }
+      38% {
+        transform: translateX(-50%) scale(0.55, 0.6);
         opacity: 0.35;
+        filter: blur(7px);
+      }
+      54% {
+        transform: translateX(-50%) scale(0.85, 0.85);
+        opacity: 0.7;
+        filter: blur(3.5px);
+      }
+      62% {
+        transform: translateX(-50%) scale(1.05, 1);
+        opacity: 0.9;
+        filter: blur(2px);
+      }
+      74% {
+        transform: translateX(-50%) scale(0.92, 0.9);
+        opacity: 0.75;
+        filter: blur(3px);
+      }
+      87% {
+        transform: translateX(-50%) scale(0.58, 0.6);
+        opacity: 0.38;
+        filter: blur(6.5px);
       }
       100% {
-        transform: translateX(-50%) scale(1);
-        opacity: 0.85;
+        transform: translateX(-50%) scale(1.05, 1);
+        opacity: 0.9;
+        filter: blur(2px);
       }
     }
 
-    @keyframes dustKick {
+    @keyframes naturalDustKickLeft {
       0% {
-        transform: translateY(0) scale(0.5);
+        opacity: 0.85;
+        transform: translate(0, 0) scale(0.6);
+      }
+      18% {
         opacity: 0.7;
+        transform: translate(-14px, -12px) scale(1.4);
+      }
+      32% {
+        opacity: 0;
+        transform: translate(-24px, -18px) scale(2);
+      }
+      33%, 100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes naturalDustKickRight {
+      0%, 60% {
+        opacity: 0;
+      }
+      62% {
+        opacity: 0.85;
+        transform: translate(0, 0) scale(0.6);
+      }
+      78% {
+        opacity: 0.7;
+        transform: translate(-14px, -12px) scale(1.4);
+      }
+      92% {
+        opacity: 0;
+        transform: translate(-24px, -18px) scale(2);
       }
       100% {
-        transform: translateY(-14px) translateX(-10px) scale(1.6);
         opacity: 0;
       }
     }
@@ -714,6 +836,7 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
   readonly astronautX = signal<number>(260);
   readonly astronautY = signal<number>(110);
   readonly isWalking = signal<boolean>(false);
+  readonly activePose = signal<'stand' | 'stride-right' | 'stride-left'>('stand');
   readonly isFlagPlanted = signal<boolean>(true);
   readonly activeNearMission = signal<MissionConfig | null>(null);
 
@@ -722,15 +845,32 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
   readonly completedCount = computed(() => this.completedMissions().size);
 
   private scrollStopTimer: ReturnType<typeof setTimeout> | null = null;
+  private walkCycleInterval: ReturnType<typeof setInterval> | null = null;
+  private walkTimeouts: ReturnType<typeof setTimeout>[] = [];
 
   constructor() {
     effect(() => {
       const p = this.masterTimeline.getSceneProgress(4); // 0.0 to 1.0 within Scene 5 & 6
       this.syncScrollWithAstronaut(p);
     });
+
+    effect(() => {
+      if (this.isWalking()) {
+        this.startWalkCycle();
+      } else {
+        this.stopWalkCycle();
+      }
+    });
   }
 
   ngOnInit(): void {
+    // Preload astronaut walk cycle sprites into memory
+    if (typeof window !== 'undefined') {
+      const p1 = new Image(); p1.src = 'assets/images/astronaut_standing.png';
+      const p2 = new Image(); p2.src = 'assets/images/astronaut_walking.png';
+      const p3 = new Image(); p3.src = 'assets/images/astronaut_walking_alt.png';
+    }
+
     // Generate initial footprints near lander
     this.footprints.set([
       { x: 140, y: 110 },
@@ -741,9 +881,50 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.stopWalkCycle();
     if (this.scrollStopTimer) {
       clearTimeout(this.scrollStopTimer);
     }
+  }
+
+  private startWalkCycle(): void {
+    if (this.walkCycleInterval) return;
+
+    const runOneCycle = () => {
+      this.walkTimeouts.forEach(t => clearTimeout(t));
+      this.walkTimeouts = [];
+
+      // t = 0ms: First stride - Right leg kicks forward in low-g lope
+      this.activePose.set('stride-right');
+
+      // t = 380ms: Passing pose as feet pass under body
+      this.walkTimeouts.push(setTimeout(() => {
+        if (this.isWalking()) this.activePose.set('stand');
+      }, 380));
+
+      // t = 675ms: Second stride - Left leg kicks forward in alternating lope
+      this.walkTimeouts.push(setTimeout(() => {
+        if (this.isWalking()) this.activePose.set('stride-left');
+      }, 675));
+
+      // t = 1055ms: Passing pose as feet pass under body
+      this.walkTimeouts.push(setTimeout(() => {
+        if (this.isWalking()) this.activePose.set('stand');
+      }, 1055));
+    };
+
+    runOneCycle();
+    this.walkCycleInterval = setInterval(runOneCycle, 1350);
+  }
+
+  private stopWalkCycle(): void {
+    if (this.walkCycleInterval) {
+      clearInterval(this.walkCycleInterval);
+      this.walkCycleInterval = null;
+    }
+    this.walkTimeouts.forEach(t => clearTimeout(t));
+    this.walkTimeouts = [];
+    this.activePose.set('stand');
   }
 
   isMissionCompleted(id: string): boolean {
@@ -805,23 +986,30 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
    * Smoothly walks astronaut to the requested mission node before opening the modal
    */
   walkToAndOpenMission(mission: MissionConfig): void {
+    if (this.isWalking()) return;
+
     this.isWalking.set(true);
     this.audio.playBeep(920, 0.08);
 
     // Calculate target X position along track
     const targetX = (mission.position.x / 100) * 3840 - 80;
+    const currentX = this.astronautX();
+    const distance = Math.abs(targetX - currentX);
+
+    // Authentic lunar lope speed: ~150px per second with natural deceleration
+    const duration = Math.max(1.35, Math.min(3.6, distance / 150));
+
+    // Rhythmic lunar step sound every 675ms (each footfall of the lope)
+    const stepInterval = setInterval(() => {
+      this.audio.playBeep(260 + Math.random() * 30, 0.03);
+    }, 675);
 
     gsap.to(this.astronautX, {
       value: targetX,
-      duration: 1.4,
-      ease: 'power2.inOut',
-      onUpdate: () => {
-        // Step sounds
-        if (Math.random() < 0.15) {
-          this.audio.playBeep(320, 0.04);
-        }
-      },
+      duration: duration,
+      ease: 'power1.inOut',
       onComplete: () => {
+        clearInterval(stepInterval);
         this.isWalking.set(false);
         this.audio.playBeep(1100, 0.15);
         this.openMission.emit(mission);
