@@ -31,6 +31,13 @@ body {
   transition: direction 0.25s var(--ease-cinematic);
 }
 
+/* Accessible Focus States */
+:focus-visible {
+  outline: 2px solid var(--accent-glow);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px rgba(112, 177, 237, 0.6);
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -90,23 +97,6 @@ body {
   border-radius: 4px;
 }
 
-.passport-stamp {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--accent-sand);
-  border-radius: 50%;
-  color: var(--accent-sand);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transform: rotate(-10deg);
-  opacity: 0.85;
-  box-shadow: 0 0 12px rgba(242, 202, 141, 0.2);
-}
-
 .telemetry-mono {
   font-family: var(--font-mono);
   letter-spacing: 0.05em;
@@ -157,15 +147,37 @@ body {
   }
 }
 
-/* Accessible Visually Hidden */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+/* Mobile & Touch Responsiveness */
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
+  .btn-cinema {
+    padding: 0.75rem 1.4rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Prefers Reduced Motion: graceful static stepped experience */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .film-grain-overlay {
+    display: none;
+  }
+
+  .beacon-blink,
+  .pulse-dot,
+  .flame-core,
+  .dust-puff {
+    animation: none !important;
+  }
 }
