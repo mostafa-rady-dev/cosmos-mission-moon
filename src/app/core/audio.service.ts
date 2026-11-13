@@ -183,4 +183,68 @@ export class AudioService {
       // Safe fallback
     }
   }
+
+  private chargeOsc: OscillatorNode | null = null;
+  private chargeGain: GainNode | null = null;
+
+  /**
+   * Turbine spin-up sound for the 3-second hold-to-charge launch button
+   */
+  startChargeTone(): void {
+    if (this.isMuted()) return;
+    this.initContext();
+    if (!this.audioCtx) return;
+    try {
+      this.stopChargeTone();
+      this.chargeOsc = this.audioCtx.createOscillator();
+      this.chargeGain = this.audioCtx.createGain();
+      this.chargeOsc.type = 'sawtooth';
+      this.chargeOsc.frequency.setValueAtTime(140, this.audioCtx.currentTime);
+      this.chargeGain.gain.setValueAtTime(0.01, this.audioCtx.currentTime);
+      this.chargeGain.gain.linearRampToValueAtTime(0.08, this.audioCtx.currentTime + 0.3);
+
+      const filter = this.audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(400, this.audioCtx.currentTime);
+      filter.frequency.linearRampToValueAtTime(1600, this.audioCtx.currentTime + 3.0);
+
+      this.chargeOsc.connect(filter);
+      filter.connect(this.chargeGain);
+      this.chargeGain.connect(this.audioCtx.destination);
+      this.chargeOsc.start();
+    } catch {
+      // Safe
+    }
+  }
+
+  updateChargeProgress(progress: number): void {
+    if (!this.chargeOsc || !this.audioCtx) return;
+    try {
+      const targetFreq = 140 + progress * 540;
+      this.chargeOsc.frequency.setTargetAtTime(targetFreq, this.audioCtx.currentTime, 0.05);
+    } catch {
+      // Safe
+    }
+  }
+
+  stopChargeTone(): void {
+    if (this.chargeOsc && this.audioCtx) {
+      try {
+        if (this.chargeGain) {
+          this.chargeGain.gain.setValueAtTime(this.chargeGain.gain.value, this.audioCtx.currentTime);
+          this.chargeGain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + 0.15);
+        }
+        setTimeout(() => {
+          this.chargeOsc?.stop();
+          this.chargeOsc?.disconnect();
+          this.chargeGain?.disconnect();
+          this.chargeOsc = null;
+          this.chargeGain = null;
+        }, 160);
+      } catch {
+        this.chargeOsc = null;
+        this.chargeGain = null;
+      }
+    }
+  }
 }

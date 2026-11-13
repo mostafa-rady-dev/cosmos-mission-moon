@@ -16,6 +16,7 @@ import gsap from 'gsap';
 import { I18nService } from '../../core/i18n.service';
 import { MasterTimelineService } from '../../core/master-timeline.service';
 import { AudioService } from '../../core/audio.service';
+import { ScrollService } from '../../core/scroll.service';
 import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.config';
 
 @Component({
@@ -44,33 +45,14 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
 
       <!-- Horizontal Scrolling Lunar Landscape -->
       <div #landscapeTrack class="landscape-track">
-        <!-- Parallax Layer 1: Distant Crater Mountains -->
-        <svg viewBox="0 0 3840 500" class="distant-crater-mountains" preserveAspectRatio="none">
-          <path d="M0 240 Q400 180 800 220 T1600 190 T2400 230 T3200 180 T3840 220 L3840 500 L0 500 Z" fill="#1E293B" opacity="0.65"/>
-          <ellipse cx="600" cy="230" rx="120" ry="16" fill="#0F172A" stroke="#475569" stroke-width="1.5"/>
-          <ellipse cx="2200" cy="210" rx="180" ry="22" fill="#0F172A" stroke="#475569" stroke-width="1.5"/>
-        </svg>
+        <!-- Parallax Layer 1: Distant Crater Mountains (Photorealistic Horizon) -->
+        <div class="distant-crater-panorama" aria-hidden="true"></div>
 
-        <!-- Parallax Layer 2: Main Surface Regolith Terrain -->
-        <svg viewBox="0 0 3840 550" class="main-lunar-surface" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="regolithGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#475569"/>
-              <stop offset="35%" stop-color="#334155"/>
-              <stop offset="100%" stop-color="#0F172A"/>
-            </linearGradient>
-          </defs>
-          <path d="M0 160 Q600 130 1200 155 T2400 140 T3600 150 L3840 160 L3840 550 L0 550 Z" fill="url(#regolithGrad)"/>
-          
-          <!-- Craters & Surface Boulders along the traverse -->
-          <ellipse cx="380" cy="240" rx="130" ry="24" fill="#1E293B" stroke="#64748B" stroke-width="2"/>
-          <ellipse cx="1450" cy="260" rx="160" ry="26" fill="#0F172A" stroke="#64748B" stroke-width="2"/>
-          <ellipse cx="2700" cy="250" rx="140" ry="22" fill="#1E293B" stroke="#64748B" stroke-width="2"/>
-
-          <!-- Surface texture lines -->
-          <line x1="200" y1="280" x2="500" y2="280" stroke="#64748B" stroke-width="1" stroke-dasharray="20 15" stroke-opacity="0.4"/>
-          <line x1="1600" y1="300" x2="2000" y2="300" stroke="#64748B" stroke-width="1" stroke-dasharray="30 20" stroke-opacity="0.3"/>
-        </svg>
+        <!-- Parallax Layer 2: Photorealistic Mare Tranquillitatis Surface Regolith -->
+        <div class="main-lunar-surface-photorealistic" aria-hidden="true">
+          <div class="regolith-photo-repeat"></div>
+          <div class="regolith-surface-shadow-layer"></div>
+        </div>
 
         <!-- Origin: Touchdown Base (Realistic Lander with Open Warm Light & Ladder) -->
         <div class="lander-base-origin">
@@ -95,6 +77,22 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
               </g>
             </svg>
             <span class="flag-pedestal-label">ASYUT LUNAR BASE // 2026</span>
+          </div>
+        </div>
+
+        <!-- High-Tech Lunar Exploration Rover (LRV) Assembly -->
+        <div class="lunar-rover-assembly" aria-label="Asyut Lunar Exploration Rover">
+          <!-- Cast Shadow on Regolith -->
+          <div class="rover-ground-shadow"></div>
+          
+          <img
+            src="assets/images/lunar_rover_photorealistic.png"
+            alt="Photorealistic Asyut Lunar Exploration Rover (LRV)"
+            class="rover-photorealistic-img"
+          />
+
+          <div class="rover-telemetry-tag">
+            <span>ASYUT-LRV // EXPLORATION UNIT</span>
           </div>
         </div>
 
@@ -169,10 +167,15 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
               <span class="waypoint-num">{{ mission.order }}</span>
             </div>
 
-            <!-- Passport-style Station Label -->
+            <!-- Proximity Compact Pill (Idle State) -->
+            <div class="beacon-compact-pill">
+              <span>WP-0{{ mission.order }}: {{ i18n.currentLang() === 'ar' ? mission.titleAr : mission.titleEn }}</span>
+            </div>
+
+            <!-- Proximity Expandable Detailed Mission Card -->
             <div class="waypoint-card hud-panel">
               <div class="card-header">
-                <span class="station-badge">WP-0{{ mission.order }}</span>
+                <span class="station-badge">WP-0{{ mission.order }} // SURVEY STATION</span>
                 @if (isMissionCompleted(mission.id)) {
                   <span class="completed-stamp">✓ {{ i18n.currentTranslations().completed }}</span>
                 }
@@ -191,22 +194,75 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
         }
       </div>
 
-      <!-- Exploration Status Bar -->
-      <div class="exploration-hud-header hud-panel">
-        <div class="exp-title-group">
-          <span class="passport-badge">
-            <span class="pulse-dot"></span>
-            <span>MARE TRANQUILLITATIS SURVEY</span>
-          </span>
-          <h2 class="exp-title">{{ i18n.currentTranslations().missionsTitle }}</h2>
-        </div>
 
-        <div class="progress-stats">
-          <span class="completed-counter">
-            {{ completedCount() }} / {{ missions.length }} {{ i18n.currentTranslations().completed }}
-          </span>
+
+      <!-- Interactive Grand Journey Completion Celebration Overlay -->
+      @if (isJourneyCompleted()) {
+        <div class="completion-celebration-backdrop" role="dialog" aria-modal="true">
+          <div class="completion-celebration-card hud-panel">
+            <div class="celebration-badge-row">
+              <span class="trophy-pulse">🏆</span>
+              <span class="cert-stamp">ASYUT AEROSPACE & NASA CERTIFICATION</span>
+            </div>
+
+            <h2 class="celebration-title">
+              {{ i18n.currentLang() === 'ar' ? '🎉 ألف مبروك يا بطل الفضاء! اكتملت الرحلة بنجاح!' : '🎉 MISSION ACCOMPLISHED! LUNAR EXPEDITION COMPLETE!' }}
+            </h2>
+
+            <p class="celebration-subtitle">
+              {{ i18n.currentLang() === 'ar' ? 'تم تكريمك رسميًا كرائد فضاء معتمد بعد استكشاف مهام القمر التسلسلية الخمس ونظامنا الشمسي بالكامل.' : 'You are officially certified as a Master Space Explorer after successfully completing all 5 NASA lunar survey missions.' }}
+            </p>
+
+            <div class="accomplishments-grid">
+              <div class="acc-badge">
+                <span class="acc-icon">🚀</span>
+                <span class="acc-title">{{ i18n.currentLang() === 'ar' ? '5 مهام هبوط قمرية' : '5 Lunar Missions' }}</span>
+                <span class="acc-sub">{{ i18n.currentLang() === 'ar' ? 'أبولو 11 حتى أرتميس 3' : 'Apollo 11 to Artemis III' }}</span>
+              </div>
+              <div class="acc-badge">
+                <span class="acc-icon">🪐</span>
+                <span class="acc-title">{{ i18n.currentLang() === 'ar' ? '9 أجرام سماوية' : '9 Solar Bodies' }}</span>
+                <span class="acc-sub">{{ i18n.currentLang() === 'ar' ? 'عبور سينمائي موثق' : 'Full Corridor Survey' }}</span>
+              </div>
+              <div class="acc-badge">
+                <span class="acc-icon">📍</span>
+                <span class="acc-title">{{ i18n.currentLang() === 'ar' ? 'بحر الهدوء' : 'Mare Tranquillitatis' }}</span>
+                <span class="acc-sub">{{ i18n.currentLang() === 'ar' ? 'مسافة 384,400 كم' : '384,400 KM Traversed' }}</span>
+              </div>
+              <div class="acc-badge">
+                <span class="acc-icon">⭐</span>
+                <span class="acc-title">{{ i18n.currentLang() === 'ar' ? 'رتبة رائد فضاء' : 'Commander Rank' }}</span>
+                <span class="acc-sub">{{ i18n.currentLang() === 'ar' ? 'مساحة أسيوط الفضائية' : 'Asyut Space Station' }}</span>
+              </div>
+            </div>
+
+            <div class="celebration-actions-row">
+              <button class="btn-cinema replay-mission-btn" (click)="replayEntireJourney()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M1 4v6h6M23 20v-6h-6"/>
+                  <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                </svg>
+                <span>{{ i18n.currentLang() === 'ar' ? 'إعادة الرحلة من البداية' : 'Replay Full Mission' }}</span>
+              </button>
+
+              <button class="btn-secondary-deck share-cert-btn" (click)="shareAchievement()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="18" cy="5" r="3"/>
+                  <circle cx="6" cy="12" r="3"/>
+                  <circle cx="18" cy="19" r="3"/>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                </svg>
+                <span>{{ shareSuccess() ? (i18n.currentLang() === 'ar' ? 'تم نسخ الشهادة! ✓' : 'Copied! ✓') : (i18n.currentLang() === 'ar' ? 'مشاركة الإنجاز' : 'Share Achievement') }}</span>
+              </button>
+
+              <button class="btn-close-cert" (click)="dismissCelebration()">
+                <span>{{ i18n.currentLang() === 'ar' ? 'استمرار الاستكشاف' : 'Continue Roaming' }}</span>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      }
     </section>
   `,
   styles: [`
@@ -289,23 +345,47 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       will-change: transform;
     }
 
-    .distant-crater-mountains {
+    .distant-crater-panorama {
       position: absolute;
-      bottom: 0;
+      bottom: 15vh;
       left: 0;
       width: 100%;
-      height: 48vh;
+      height: 38vh;
       pointer-events: none;
+      background-image: url('/assets/images/lunar_surface_photorealistic.jpg');
+      background-size: 3840px 100%;
+      background-repeat: no-repeat;
+      background-position: left 20%;
+      opacity: 0.45;
+      filter: blur(2px) contrast(1.1);
+      mask-image: linear-gradient(to top, #000 40%, transparent 100%);
     }
 
-    .main-lunar-surface {
+    .main-lunar-surface-photorealistic {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 42vh;
+      height: 44vh;
       pointer-events: none;
-      filter: drop-shadow(0 -10px 25px rgba(0, 0, 0, 0.8));
+      overflow: hidden;
+      mask-image: linear-gradient(to top, #000 75%, transparent 100%);
+    }
+
+    .regolith-photo-repeat {
+      position: absolute;
+      inset: 0;
+      background-image: url('/assets/images/lunar_surface_photorealistic.jpg');
+      background-size: 3840px 100%;
+      background-repeat: no-repeat;
+      background-position: left bottom;
+      filter: contrast(1.22) brightness(0.96);
+    }
+
+    .regolith-surface-shadow-layer {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(8, 11, 26, 0.5) 0%, transparent 40%, rgba(8, 11, 26, 0.7) 100%);
     }
 
     /* Origin Lander Base & Flag */
@@ -372,7 +452,52 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       font-family: var(--font-mono);
       font-size: 0.55rem;
       white-space: nowrap;
-      color: var(--accent-sand);
+      color: var(--accent-glow);
+    }
+
+    /* High-tech Lunar Exploration Rover (LRV) */
+    .lunar-rover-assembly {
+      position: absolute;
+      left: 780px;
+      bottom: 85px;
+      width: 170px;
+      height: 100px;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .rover-ground-shadow {
+      position: absolute;
+      bottom: -6px;
+      left: 10px;
+      width: 155px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(3, 7, 21, 0.95);
+      filter: blur(4px);
+    }
+
+    .rover-photorealistic-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: contrast(1.15) brightness(1.05) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.85));
+    }
+
+    .rover-telemetry-tag {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--accent-glow);
+      background: rgba(8, 11, 26, 0.7);
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      border: 1px solid rgba(54, 197, 240, 0.3);
+      white-space: nowrap;
     }
 
     /* Footprints */
@@ -565,17 +690,46 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       color: #FFFFFF;
     }
 
+    .beacon-compact-pill {
+      margin-top: 0.65rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(10, 14, 28, 0.85);
+      border: 1px solid var(--border-line);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent-glow);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .mission-waypoint-node:hover .beacon-compact-pill,
+    .mission-waypoint-node.active-target .beacon-compact-pill {
+      display: none;
+    }
+
     .waypoint-card {
-      margin-top: 1rem;
-      width: 260px;
+      margin-top: 0.75rem;
+      width: 270px;
       padding: 1.15rem;
       text-align: start;
-      transform: translateY(6px);
-      transition: all 0.3s ease;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+      pointer-events: none;
+      overflow: hidden;
+      transition: max-height 0.35s var(--ease-cinematic), opacity 0.3s ease, transform 0.3s ease;
 
-      &:hover {
+      .active-target &,
+      .mission-waypoint-node:hover &,
+      .mission-waypoint-node:focus-within & {
+        max-height: 280px;
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
         border-color: var(--accent-glow);
-        transform: translateY(0);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(54, 197, 240, 0.25);
       }
     }
 
@@ -589,7 +743,7 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
     .station-badge {
       font-family: var(--font-mono);
       font-size: 0.65rem;
-      color: var(--accent-sand);
+      color: var(--accent-glow);
       letter-spacing: 0.08em;
     }
 
@@ -630,49 +784,7 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
       border-radius: 8px;
     }
 
-    /* Top Exploration HUD */
-    .exploration-hud-header {
-      position: absolute;
-      top: 6.5rem;
-      inset-inline-start: 2rem;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-      padding: 1rem 1.75rem;
-      max-width: 600px;
 
-      @media (max-width: 768px) {
-        inset-inline-start: 1rem;
-        top: 5rem;
-        padding: 0.85rem 1.25rem;
-      }
-    }
-
-    .exp-title {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-top: 0.2rem;
-    }
-
-    .completed-counter {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--accent-sand);
-    }
-
-    .pulse-dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent-sand);
-      box-shadow: 0 0 6px var(--accent-sand);
-    }
 
     /* Keyframes */
     @keyframes hatchPulse {
@@ -690,133 +802,129 @@ import { MISSIONS_DATA, MissionConfig } from '../../../assets/missions/missions.
     }
 
     @keyframes naturalLunarLope {
-      /* Phase 1: Push off from lunar ground */
-      0% {
-        transform: translateY(0px) rotate(3deg) scaleY(0.96);
-      }
-      /* Spring upwards */
-      14% {
-        transform: translateY(-8px) rotate(6deg) scaleY(1.02);
-      }
-      /* Apex of float in 1/6th gravity (graceful hang time) */
-      38% {
-        transform: translateY(-26px) rotate(2deg) scaleY(1);
-      }
-      /* Smooth descent */
-      54% {
-        transform: translateY(-10px) rotate(4deg) scaleY(1);
-      }
-      /* Touchdown on surface & knee absorption */
-      62% {
-        transform: translateY(0px) rotate(3.5deg) scaleY(0.96);
-      }
-      /* Phase 2: Second foot push-off & counter-weight bound */
-      74% {
-        transform: translateY(-8px) rotate(5.5deg) scaleY(1.02);
-      }
-      /* Second apex float */
-      87% {
-        transform: translateY(-24px) rotate(1.5deg) scaleY(1);
-      }
-      /* Soft landing back on surface */
-      96% {
-        transform: translateY(-2px) rotate(3deg) scaleY(0.98);
-      }
-      100% {
-        transform: translateY(0px) rotate(3deg) scaleY(0.96);
-      }
+      0%, 100% { transform: translateY(0) rotate(3deg) scaleY(0.96); }
+      20% { transform: translateY(-12px) rotate(5deg) scaleY(1.02); }
+      45% { transform: translateY(-26px) rotate(2deg) scaleY(1); }
+      70% { transform: translateY(-10px) rotate(4deg) scaleY(1); }
     }
 
-    @keyframes naturalShadowLope {
-      0% {
-        transform: translateX(-50%) scale(1.05, 1);
-        opacity: 0.9;
-        filter: blur(2px);
-      }
-      14% {
-        transform: translateX(-50%) scale(0.9, 0.9);
-        opacity: 0.75;
-        filter: blur(3px);
-      }
-      38% {
-        transform: translateX(-50%) scale(0.55, 0.6);
-        opacity: 0.35;
-        filter: blur(7px);
-      }
-      54% {
-        transform: translateX(-50%) scale(0.85, 0.85);
-        opacity: 0.7;
-        filter: blur(3.5px);
-      }
-      62% {
-        transform: translateX(-50%) scale(1.05, 1);
-        opacity: 0.9;
-        filter: blur(2px);
-      }
-      74% {
-        transform: translateX(-50%) scale(0.92, 0.9);
-        opacity: 0.75;
-        filter: blur(3px);
-      }
-      87% {
-        transform: translateX(-50%) scale(0.58, 0.6);
-        opacity: 0.38;
-        filter: blur(6.5px);
-      }
-      100% {
-        transform: translateX(-50%) scale(1.05, 1);
-        opacity: 0.9;
-        filter: blur(2px);
-      }
+    /* Interactive Celebration Modal */
+    .completion-celebration-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(3, 7, 21, 0.88);
+      backdrop-filter: blur(16px);
+      padding: 1.5rem;
+      animation: modalFadeIn 0.35s ease-out;
     }
 
-    @keyframes naturalDustKickLeft {
-      0% {
-        opacity: 0.85;
-        transform: translate(0, 0) scale(0.6);
-      }
-      18% {
-        opacity: 0.7;
-        transform: translate(-14px, -12px) scale(1.4);
-      }
-      32% {
-        opacity: 0;
-        transform: translate(-24px, -18px) scale(2);
-      }
-      33%, 100% {
-        opacity: 0;
-      }
+    .completion-celebration-card {
+      width: 100%;
+      max-width: 660px;
+      padding: 2rem 1.75rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      border: 2px solid var(--accent-glow);
+      border-radius: 24px;
+      box-shadow: 0 0 60px rgba(54, 197, 240, 0.35);
+      background: rgba(11, 18, 38, 0.95);
+      animation: popIn 0.35s ease-out;
+
+      @media (max-width: 600px) { padding: 1.25rem 0.85rem; gap: 0.75rem; }
     }
 
-    @keyframes naturalDustKickRight {
-      0%, 60% {
-        opacity: 0;
-      }
-      62% {
-        opacity: 0.85;
-        transform: translate(0, 0) scale(0.6);
-      }
-      78% {
-        opacity: 0.7;
-        transform: translate(-14px, -12px) scale(1.4);
-      }
-      92% {
-        opacity: 0;
-        transform: translate(-24px, -18px) scale(2);
-      }
-      100% {
-        opacity: 0;
-      }
+    .celebration-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent-glow);
     }
 
-    @keyframes visorGlint {
-      0%, 100% { opacity: 0.4; transform: scale(0.8); }
-      50% { opacity: 1; transform: scale(1.2); }
+    .trophy-pulse {
+      font-size: 1.8rem;
+      filter: drop-shadow(0 0 12px gold);
     }
 
-    @keyframes beaconPing {
-      0% { transform: scale(0.6); opacity: 0.8; }
-      100% { transform: scale(1.6); opacity: 0; }
+    .celebration-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 3.5vw, 1.85rem);
+      font-weight: 800;
+      color: #FFFFFF;
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    .celebration-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 0;
+      max-width: 520px;
+    }
+
+    .accomplishments-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+      margin: 0.4rem 0;
+      @media (max-width: 600px) { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .acc-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.65rem 0.4rem;
+      background: rgba(6, 10, 22, 0.6);
+      border: 1px solid var(--border-line);
+      border-radius: 10px;
+    }
+
+    .acc-icon { font-size: 1.3rem; }
+    .acc-title { font-size: 0.72rem; font-weight: 700; color: #FFFFFF; }
+    .acc-sub { font-size: 0.6rem; color: var(--text-faint); font-family: var(--font-mono); }
+
+    .celebration-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .replay-mission-btn {
+      padding: 0.7rem 1.3rem;
+      font-size: 0.92rem;
+      border-radius: 10px;
+    }
+
+    .share-cert-btn {
+      padding: 0.7rem 1.1rem;
+      font-size: 0.88rem;
+      border-radius: 10px;
+    }
+
+    .btn-close-cert {
+      padding: 0.7rem 0.9rem;
+      background: transparent;
+      border: 1px solid var(--border-line);
+      color: var(--text-muted);
+      border-radius: 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      &:hover { color: #FFFFFF; border-color: var(--accent-glow); }
     }
   `]
 })
@@ -824,6 +932,7 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
   protected readonly i18n = inject(I18nService);
   protected readonly masterTimeline = inject(MasterTimelineService);
   private readonly audio = inject(AudioService);
+  private readonly scroll = inject(ScrollService);
 
   readonly openMission = output<MissionConfig>();
 
@@ -832,13 +941,19 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
 
   readonly missions: MissionConfig[] = MISSIONS_DATA;
   readonly completedMissions = signal<Set<string>>(new Set<string>());
+  readonly watchedMissions = signal<Set<string>>(new Set<string>());
+  private isLockedOnMission = false;
 
-  readonly astronautX = signal<number>(260);
+  readonly isJourneyCompleted = signal<boolean>(false);
+  readonly shareSuccess = signal<boolean>(false);
+
+  readonly astronautX = signal<number>(440);
   readonly astronautY = signal<number>(110);
   readonly isWalking = signal<boolean>(false);
   readonly activePose = signal<'stand' | 'stride-right' | 'stride-left'>('stand');
   readonly isFlagPlanted = signal<boolean>(true);
   readonly activeNearMission = signal<MissionConfig | null>(null);
+  readonly isWalkingToMission = signal<boolean>(false);
 
   readonly footprints = signal<{ x: number; y: number }[]>([]);
 
@@ -846,6 +961,8 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
 
   private scrollStopTimer: ReturnType<typeof setTimeout> | null = null;
   private walkCycleInterval: ReturnType<typeof setInterval> | null = null;
+  private walkStepInterval: ReturnType<typeof setInterval> | null = null;
+  private currentWalkTween: gsap.core.Tween | null = null;
   private walkTimeouts: ReturnType<typeof setTimeout>[] = [];
 
   constructor() {
@@ -882,8 +999,16 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopWalkCycle();
+    this.currentWalkTween?.kill();
+    this.currentWalkTween = null;
+    this.isWalkingToMission.set(false);
+    if (this.walkStepInterval) {
+      clearInterval(this.walkStepInterval);
+      this.walkStepInterval = null;
+    }
     if (this.scrollStopTimer) {
       clearTimeout(this.scrollStopTimer);
+      this.scrollStopTimer = null;
     }
   }
 
@@ -954,8 +1079,13 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
     const trackX = -p * maxScrollX;
     gsap.set(track, { x: trackX });
 
-    // Astronaut walks forward ahead of camera center
-    const targetX = 260 + p * (maxScrollX + 400);
+    // Guard: do not override astronaut position if an explicit waypoint walk is active
+    if (this.isWalkingToMission()) return;
+
+    // Astronaut begins at 440px (clear of lander leg) and walks forward smoothly across regolith to 3680px
+    const startX = 440;
+    const endX = 3680;
+    const targetX = startX + p * (endX - startX);
     this.astronautX.set(targetX);
 
     // Astronaut actively executes low-gravity walking bounds while scrolling
@@ -976,18 +1106,80 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Detect proximity to nearest mission node
+    // Detect proximity to nearest mission node (< 3.5% of track width)
     const currentTrackPct = (targetX / 3840) * 100;
     const near = this.missions.find(m => Math.abs(m.position.x - currentTrackPct) < 3.5);
     this.activeNearMission.set(near ?? null);
+
+    // Auto-stop astronaut, lock scroll, and launch mission downlink video
+    if (!this.isLockedOnMission) {
+      const nextUnvisited = this.missions.find(m => 
+        !this.watchedMissions().has(m.id) && 
+        Math.abs(m.position.x - currentTrackPct) <= 2.2
+      );
+
+      if (nextUnvisited) {
+        this.isLockedOnMission = true;
+        this.isWalking.set(false);
+        this.scroll.lockScroll();
+        this.audio.playBeep(1100, 0.15);
+        this.openMission.emit(nextUnvisited);
+      }
+    }
+  }
+
+  onMissionFinished(missionId: string): void {
+    this.watchedMissions.update((set) => {
+      const next = new Set(set);
+      next.add(missionId);
+      return next;
+    });
+    this.markCompleted(missionId);
+    this.isLockedOnMission = false;
+    this.scroll.unlockScroll();
+
+    // Check if journey is completely finished (all 5 missions completed or Mission 5 artemis-3)
+    if (this.completedMissions().size >= 5 || missionId === 'artemis-3') {
+      setTimeout(() => {
+        this.isJourneyCompleted.set(true);
+        this.audio.playBeep(1200, 0.3);
+      }, 700);
+    }
+  }
+
+  replayEntireJourney(): void {
+    this.isJourneyCompleted.set(false);
+    this.watchedMissions.set(new Set<string>());
+    this.completedMissions.set(new Set<string>());
+    this.audio.playBeep(880, 0.1);
+    this.scroll.scrollTo(0, { duration: 2.2 });
+  }
+
+  shareAchievement(): void {
+    const text = this.i18n.currentLang() === 'ar'
+      ? '🏆 أتممت بنجاح رحلة استكشاف القمر والمجموعة الشمسية مع مساحة أسيوط الفضائية وناسا! 🚀🌕'
+      : '🏆 I successfully completed the NASA Lunar Exploration Mission with Asyut Space Workspace! 🚀🌕';
+
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.shareSuccess.set(true);
+        setTimeout(() => this.shareSuccess.set(false), 3000);
+      }).catch(() => {});
+    }
+  }
+
+  dismissCelebration(): void {
+    this.isJourneyCompleted.set(false);
   }
 
   /**
-   * Smoothly walks astronaut to the requested mission node before opening the modal
+   * Smoothly walks astronaut to the requested mission node before opening the modal.
+   * Fixed: Uses an intermediate motion object and explicitly updates the WritableSignal.
    */
   walkToAndOpenMission(mission: MissionConfig): void {
-    if (this.isWalking()) return;
+    if (this.isWalking() || this.isLockedOnMission) return;
 
+    this.isWalkingToMission.set(true);
     this.isWalking.set(true);
     this.audio.playBeep(920, 0.08);
 
@@ -1000,17 +1192,42 @@ export class MoonExploreComponent implements OnInit, OnDestroy {
     const duration = Math.max(1.35, Math.min(3.6, distance / 150));
 
     // Rhythmic lunar step sound every 675ms (each footfall of the lope)
-    const stepInterval = setInterval(() => {
+    if (this.walkStepInterval) {
+      clearInterval(this.walkStepInterval);
+    }
+    this.walkStepInterval = setInterval(() => {
       this.audio.playBeep(260 + Math.random() * 30, 0.03);
     }, 675);
 
-    gsap.to(this.astronautX, {
-      value: targetX,
+    // Intermediate motion object for GSAP to drive Angular WritableSignal safely
+    const motionObj = { x: currentX };
+    this.currentWalkTween?.kill();
+    this.currentWalkTween = gsap.to(motionObj, {
+      x: targetX,
       duration: duration,
       ease: 'power1.inOut',
+      onUpdate: () => {
+        this.astronautX.set(motionObj.x);
+
+        // Dynamically add footprints as astronaut walks to waypoint
+        const prints = this.footprints();
+        const lastPrint = prints[prints.length - 1];
+        if (!lastPrint || Math.abs(motionObj.x - lastPrint.x) > 35) {
+          if (prints.length < 80) {
+            this.footprints.update(fps => [...fps, { x: motionObj.x, y: 108 + (fps.length % 2 === 0 ? 3 : -3) }]);
+          }
+        }
+      },
       onComplete: () => {
-        clearInterval(stepInterval);
+        if (this.walkStepInterval) {
+          clearInterval(this.walkStepInterval);
+          this.walkStepInterval = null;
+        }
+        this.currentWalkTween = null;
         this.isWalking.set(false);
+        this.isWalkingToMission.set(false);
+        this.isLockedOnMission = true;
+        this.scroll.lockScroll();
         this.audio.playBeep(1100, 0.15);
         this.openMission.emit(mission);
       }

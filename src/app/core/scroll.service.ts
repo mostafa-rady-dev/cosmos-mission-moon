@@ -51,11 +51,12 @@ export class ScrollService {
     gsap.ticker.lagSmoothing(0);
   }
 
-  scrollTo(target: number | string | HTMLElement, options?: { offset?: number; immediate?: boolean; duration?: number }): void {
+  scrollTo(target: number | string | HTMLElement, options?: { offset?: number; immediate?: boolean; duration?: number; onComplete?: () => void }): void {
     this.lenis?.scrollTo(target, {
       offset: options?.offset ?? 0,
       immediate: options?.immediate ?? false,
       duration: options?.duration ?? 1.5,
+      onComplete: options?.onComplete,
     });
   }
 
@@ -64,6 +65,7 @@ export class ScrollService {
     this.lenis?.stop();
     if (typeof document !== 'undefined') {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     }
   }
 
@@ -72,6 +74,7 @@ export class ScrollService {
     this.lenis?.start();
     if (typeof document !== 'undefined') {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
   }
 

@@ -37,7 +37,18 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
-__screenshots__/
+# Testing & scratch scripts
+*.mjs
+*.zip
+*.log
+flyby_*.png
+relic_*.png
+scene*.png
+test_*.png
+verified_*.png
+surveyor_*.png
+dock_*.png
+flight_test_results.json
 
 # System files
 .DS_Store

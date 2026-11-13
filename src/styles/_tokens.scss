@@ -1,36 +1,38 @@
 :root {
-  /* Core Color Palette (from reference ydp.0xd22.dev/join) */
-  --bg-deep: #0A0E1C;
-  --bg-layer-1: #161D39;
-  --bg-surface: #0F1622;
-  --bg-raised: #172130;
+  /* COSMOS Semantic Color Tokens (75% Deep Space / 15% Nebula Blue / 10% Cosmic Purple & Galaxy Cyan) */
+  --bg-deep: #080B1A;         /* Primary viewport & cosmic void (75% visual weight) */
+  --bg-layer-1: #111A35;     /* Secondary containers & elevated surfaces (15% visual weight) */
+  --bg-surface: #111A35;     /* HUD cards & panels */
+  --bg-raised: #182346;      /* Elevated dropdowns & flyouts */
   
-  --accent-primary: #2A71D6; /* Cobalt */
-  --accent-glow: #70B1ED;    /* Azure */
-  --accent-sand: #F2CA8D;    /* Passport / Boarding Pass Gold */
-  --accent-ember: #F27636;   /* Thruster flame */
-  --accent-success: #3EC87D; /* Touchdown / Cleared */
-  --accent-danger: #F4514F;  /* Warning / Countdown */
+  --accent-primary: #6657F5; /* Cosmic Purple: primary interactive CTAs, active badges, focus rings */
+  --accent-glow: #36C5F0;    /* Galaxy Cyan: telemetry highlights, subtle borders, micro-interactions */
+  --accent-ember: #F27636;   /* Physical rocket thrusters & exhaust flames only */
+  --accent-gold-physical: #F2CA8D; /* Reserved exclusively for natural planetary/spacecraft MLI foil materials */
+  --accent-sand: #36C5F0;    /* Purged from UI chrome; aliased to Galaxy Cyan for strict theme discipline */
+  --accent-success: #3EC87D; /* Nominal telemetry / touchdown confirmed */
+  --accent-danger: #F4514F;  /* Warning / emergency countdown */
 
-  --text-primary: #F9F5EC;   /* Paper white */
-  --text-muted: #A2AFC0;     /* Muted slate */
-  --text-faint: #6F7C8C;     /* Subtle technical telemetry */
+  --text-primary: #F4F5FF;   /* Starlight: high-contrast headings & display typography */
+  --text-muted: #8993AA;     /* Nebula Gray: scientific body copy & secondary labels */
+  --text-faint: #5A6680;     /* Subtle technical telemetry & captions */
 
-  --border-line: rgba(227, 232, 239, 0.12);
-  --border-line-strong: rgba(227, 232, 239, 0.28);
-  --border-accent: rgba(112, 177, 237, 0.35);
+  --border-line: rgba(244, 245, 255, 0.08);
+  --border-line-strong: rgba(244, 245, 255, 0.18);
+  --border-accent: rgba(54, 197, 240, 0.35);
 
-  --glass-bg: rgba(15, 22, 34, 0.72);
-  --glass-bg-elevated: rgba(23, 33, 48, 0.85);
-  --glass-blur: blur(16px);
-  --hud-glow: 0 0 24px rgba(112, 177, 237, 0.22);
+  --glass-bg: rgba(17, 26, 53, 0.72);
+  --glass-bg-elevated: rgba(24, 35, 70, 0.85);
+  --glass-blur: blur(12px);
+  --hud-glow: 0 0 24px rgba(54, 197, 240, 0.22);
+  --purple-glow: 0 0 24px rgba(102, 87, 245, 0.35);
 
   /* Typography */
   --font-display-ar: 'Changa', 'Cairo', sans-serif;
   --font-body-ar: 'Cairo', sans-serif;
-  --font-display-en: 'Bricolage Grotesque', sans-serif;
-  --font-body-en: 'Instrument Sans', system-ui, sans-serif;
-  --font-mono: 'Space Mono', ui-monospace, monospace;
+  --font-display-en: 'Space Grotesk', sans-serif;
+  --font-body-en: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Space Mono', monospace;
 
   /* Active Font Variables switched by direction */
   --font-display: var(--font-display-ar);

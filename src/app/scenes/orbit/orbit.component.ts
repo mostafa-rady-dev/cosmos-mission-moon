@@ -57,51 +57,34 @@ import { AudioService } from '../../core/audio.service';
         }
       </div>
 
-      <!-- Curved Earth Horizon & Atmospheric Blue Rim -->
+      <!-- Solar Limb Corona Starburst Flare -->
+      <div class="solar-limb-corona" aria-hidden="true">
+        <div class="sun-core"></div>
+        <div class="sun-flare-rays"></div>
+      </div>
+
+      <!-- Curved Earth Horizon & Atmospheric Blue Rim (Photorealistic Low Earth Orbit Asset) -->
       <div #earthHorizon class="earth-horizon-wrapper">
-        <svg viewBox="0 0 1920 1080" class="earth-svg" preserveAspectRatio="none">
-          <defs>
-            <radialGradient id="earthAtmosphere" cx="50%" cy="100%" r="65%">
-              <stop offset="0%" stop-color="#1E3A8A"/>
-              <stop offset="50%" stop-color="#0E1E4D"/>
-              <stop offset="85%" stop-color="#38BDF8" stop-opacity="0.8"/>
-              <stop offset="92%" stop-color="#70B1ED" stop-opacity="0.95"/>
-              <stop offset="100%" stop-color="#0A0E1C" stop-opacity="0"/>
-            </radialGradient>
-            <linearGradient id="earthOceans" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#0A2540"/>
-              <stop offset="40%" stop-color="#103B6B"/>
-              <stop offset="100%" stop-color="#061826"/>
-            </linearGradient>
-            <filter id="auroraGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="15" result="blur"/>
-              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-            </filter>
-          </defs>
-
-          <!-- Outer Atmospheric Halo Glow -->
-          <ellipse cx="960" cy="1200" rx="1400" ry="750" fill="url(#earthAtmosphere)" filter="url(#auroraGlow)"/>
-
-          <!-- Earth Surface Disc -->
-          <ellipse cx="960" cy="1220" rx="1360" ry="700" fill="url(#earthOceans)"/>
-
-          <!-- Continents (North Africa & Egypt Outline Highlighted with Nile River Glow) -->
-          <g class="continent-shapes" opacity="0.85">
-            <!-- Sinai & Red Sea Rift -->
-            <path d="M920 620 Q960 580 980 630 T950 710 Z" fill="#2D4A3E" stroke="#70B1ED" stroke-width="0.5"/>
-            <!-- Nile Delta & River Path Glow (Asyut highlighted) -->
-            <path d="M940 590 L950 640 L955 690 L950 730" stroke="#70B1ED" stroke-width="2.5" fill="none" filter="drop-shadow(0 0 6px #70B1ED)"/>
-            <!-- Asyut Ground Station Radiant Beacon -->
-            <circle cx="953" cy="670" r="4" fill="#F2CA8D" class="ground-station-ping"/>
-            <!-- Swirling Cloud Formations Over Oceans -->
-            <path d="M600 680 Q750 630 900 670 T1250 650" stroke="#FFFFFF" stroke-width="12" stroke-opacity="0.3" stroke-linecap="round" fill="none"/>
-            <path d="M800 750 Q1000 700 1200 740" stroke="#FFFFFF" stroke-width="16" stroke-opacity="0.25" stroke-linecap="round" fill="none"/>
-          </g>
-        </svg>
+        <img
+          src="assets/images/earth_horizon_photorealistic.jpg"
+          alt="Photorealistic Earth Curved Limb from Low Earth Orbit"
+          class="earth-photorealistic-img"
+        />
+        <div class="earth-atmospheric-limb-glow" aria-hidden="true"></div>
+        <div class="ground-station-overlay" aria-hidden="true">
+          <div class="ground-station-ping"></div>
+          <span class="ground-station-callout">ASYUT TRACKING COMPLEX // 27.18° N 31.18° E</span>
+        </div>
       </div>
 
       <!-- Rocket & Booster Assembly in Stage Separation -->
       <div #spacecraftWrapper class="spacecraft-container">
+        <!-- Interstage Cold-Gas Separation Vents -->
+        <div class="staging-gas-assembly" [class.firing]="isSeparating()" aria-hidden="true">
+          <div class="coldgas-cloud left-gas"></div>
+          <div class="coldgas-cloud right-gas"></div>
+        </div>
+
         <!-- Stage 1 Detached Booster (Tumbling Away) -->
         <div #boosterStage class="booster-stage">
           <img src="assets/images/booster_realistic.png" alt="Spent Booster Stage" class="booster-realistic-img" />
@@ -109,7 +92,12 @@ import { AudioService } from '../../core/audio.service';
 
         <!-- Upper Stage 2 & Trans-Lunar Vehicle (Photorealistic Sustained Flight) -->
         <div #upperStage class="upper-stage realistic-orbit-stage">
-          <img src="assets/images/cruiser_realistic.png" alt="Realistic Upper Stage" class="orbit-craft-img" />
+          <!-- RCS Cold-gas Thruster Jets -->
+          <div class="rcs-thrusters-cluster" [class.rcs-firing]="isSeparating()">
+            <div class="rcs-jet rcs-left"></div>
+            <div class="rcs-jet rcs-right"></div>
+          </div>
+          <img src="assets/images/cruiser_realistic.png" alt="Realistic Upper Stage" class="orbit-craft-img" width="140" height="78" />
           <div class="orbit-thruster-beam"></div>
         </div>
       </div>
@@ -121,7 +109,7 @@ import { AudioService } from '../../core/audio.service';
             <span class="pulse-dot"></span>
             <span>STAGE_02 // SEPARATION CONFIRMED</span>
           </span>
-          <span class="hud-alt-badge">ALT: 320 KM</span>
+          <span class="hud-alt-badge" dir="ltr">ALT: 320 KM</span>
         </div>
 
         <h2 class="hud-title">{{ i18n.currentTranslations().atmosphereTitle }}</h2>
@@ -130,16 +118,22 @@ import { AudioService } from '../../core/audio.service';
         <div class="hud-telemetry-strip">
           <div class="strip-item">
             <span class="strip-lbl">VELOCITY</span>
-            <span class="strip-val">7.82 KM/S</span>
+            <span class="strip-val" dir="ltr">7.82 KM/S</span>
           </div>
           <div class="strip-item">
             <span class="strip-lbl">INCLINATION</span>
-            <span class="strip-val">28.5°</span>
+            <span class="strip-val" dir="ltr">28.5°</span>
           </div>
           <div class="strip-item">
             <span class="strip-lbl">DOWNRANGE</span>
-            <span class="strip-val">1,420 KM</span>
+            <span class="strip-val" dir="ltr">1,420 KM</span>
           </div>
+        </div>
+
+        <div class="orbital-vectors-strip">
+          <span class="vector-tag"><span class="orbit-live-dot"></span> ORBIT: STABLE INSERTION</span>
+          <span class="vector-tag">APOAPSIS: 324 KM</span>
+          <span class="vector-tag">PERIAPSIS: 318 KM</span>
         </div>
 
         <div class="status-indicator-row">
@@ -237,19 +231,138 @@ import { AudioService } from '../../core/audio.service';
     /* Earth Horizon Curve */
     .earth-horizon-wrapper {
       position: absolute;
-      bottom: -15vh;
+      bottom: -8vh;
       left: 0;
       width: 100%;
-      height: 80vh;
+      height: 75vh;
       pointer-events: none;
       transform-origin: bottom center;
+      overflow: hidden;
     }
 
-    .earth-svg {
+    .earth-photorealistic-img {
       width: 100%;
       height: 100%;
-      display: block;
-      filter: drop-shadow(0 0 60px rgba(42, 113, 214, 0.4));
+      object-fit: cover;
+      object-position: center bottom;
+      filter: contrast(1.15) brightness(1.05) saturate(1.1);
+      mask-image: radial-gradient(ellipse 100% 90% at 50% 90%, black 72%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 100% 90% at 50% 90%, black 72%, transparent 100%);
+    }
+
+    .earth-atmospheric-limb-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 90% 50% at 50% 55%, rgba(56, 189, 248, 0.35) 0%, rgba(130, 210, 255, 0.15) 35%, transparent 70%);
+      mix-blend-mode: screen;
+    }
+
+    .ground-station-overlay {
+      position: absolute;
+      bottom: 20%;
+      left: 36%;
+      transform: translate(-50%, 0);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ground-station-callout {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--accent-glow);
+      background: rgba(8, 11, 26, 0.7);
+      border: 1px solid rgba(54, 197, 240, 0.35);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    /* Solar Limb Corona Starburst */
+    .solar-limb-corona {
+      position: absolute;
+      top: 14%;
+      right: 12%;
+      width: 160px;
+      height: 160px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .sun-core {
+      position: absolute;
+      inset: 20%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FFFFFF 0%, #E0F2FE 40%, rgba(56, 189, 248, 0.4) 70%, transparent 100%);
+      filter: blur(10px) drop-shadow(0 0 40px #38BDF8) drop-shadow(0 0 80px #fff);
+      animation: pulseAnim 3s infinite ease-in-out;
+    }
+
+    .sun-flare-rays {
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.35) 0%, rgba(54, 197, 240, 0.15) 30%, transparent 70%);
+      filter: blur(14px);
+    }
+
+    /* RCS Cold-gas Thrusters */
+    .rcs-thrusters-cluster {
+      position: absolute;
+      top: 35%;
+      width: 100%;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+
+      &.rcs-firing {
+        opacity: 1;
+      }
+    }
+
+    .rcs-jet {
+      position: absolute;
+      width: 20px;
+      height: 6px;
+      background: radial-gradient(ellipse at center, #FFFFFF 0%, #36C5F0 60%, transparent 100%);
+      filter: blur(2px);
+      animation: thrusterPulse 0.08s infinite alternate;
+
+      &.rcs-left {
+        left: -8px;
+        transform: rotate(-15deg);
+      }
+
+      &.rcs-right {
+        right: -8px;
+        transform: rotate(15deg);
+      }
+    }
+
+    .orbital-vectors-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 0.85rem;
+      padding-top: 0.65rem;
+      border-top: 1px dashed rgba(244, 245, 255, 0.12);
+    }
+
+    .vector-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent-glow);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .orbit-live-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-success);
+      box-shadow: 0 0 6px var(--accent-success);
     }
 
     .ground-station-ping {
@@ -290,15 +403,54 @@ import { AudioService } from '../../core/audio.service';
 
     .orbit-thruster-beam {
       position: absolute;
-      bottom: -15px;
+      bottom: -22px;
       left: 50%;
       transform: translateX(-50%);
-      width: 45px;
-      height: 75px;
-      background: radial-gradient(ellipse at top, #FFFFFF 0%, #38BDF8 35%, #2A71D6 70%, transparent 100%);
-      filter: blur(8px);
+      width: 44px;
+      height: 95px;
+      background: radial-gradient(ellipse 65% 100% at 50% 0%, rgba(255, 255, 255, 0.95) 0%, rgba(186, 230, 253, 0.6) 28%, rgba(56, 189, 248, 0.22) 60%, transparent 88%);
+      filter: blur(5px);
       mix-blend-mode: screen;
-      animation: plumeFlicker 0.06s infinite alternate;
+      animation: plumeFlicker 0.05s infinite alternate;
+    }
+
+    /* Interstage Cold-Gas Separation Vents */
+    .staging-gas-assembly {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 140px;
+      height: 60px;
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+
+      &.firing {
+        opacity: 1;
+      }
+    }
+
+    .coldgas-cloud {
+      position: absolute;
+      top: 10px;
+      width: 45px;
+      height: 30px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.85) 0%, rgba(220, 235, 255, 0.4) 45%, transparent 75%);
+      filter: blur(6px);
+      animation: coldGasExpand 0.5s infinite ease-out;
+
+      &.left-gas {
+        left: 10px;
+        transform-origin: right center;
+      }
+      &.right-gas {
+        right: 10px;
+        transform-origin: left center;
+        animation-delay: 0.08s;
+      }
     }
 
     .booster-stage {
@@ -348,11 +500,13 @@ import { AudioService } from '../../core/audio.service';
       font-family: var(--font-mono);
       font-size: 0.75rem;
       font-weight: 700;
-      color: var(--accent-sand);
-      background: rgba(242, 202, 141, 0.1);
-      border: 1px solid rgba(242, 202, 141, 0.35);
+      color: var(--accent-glow);
+      background: rgba(54, 197, 240, 0.1);
+      border: 1px solid rgba(54, 197, 240, 0.35);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
+      direction: ltr;
+      unicode-bidi: isolate;
     }
 
     .hud-title {
@@ -446,6 +600,11 @@ import { AudioService } from '../../core/audio.service';
       100% { transform: scaleY(1.08); opacity: 1; }
     }
 
+    @keyframes coldGasExpand {
+      0% { transform: scale(0.4); opacity: 0.9; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+
     @keyframes rcsBurst {
       0% { transform: scale(0.5); opacity: 0; }
       50% { transform: scale(1.8); opacity: 1; }
@@ -468,6 +627,8 @@ export class OrbitComponent implements OnInit, OnDestroy {
   readonly telemetryOverlay = viewChild<ElementRef<HTMLElement>>('telemetryOverlay');
 
   readonly stars: { top: number; left: number; size: number; opacity: number }[] = [];
+  readonly isSeparating = signal<boolean>(false);
+  private hasPlayedSeparationAudio = false;
 
   constructor() {
     // Generate 60 randomized stars for the upper orbit
@@ -526,24 +687,41 @@ export class OrbitComponent implements OnInit, OnDestroy {
     }
 
     if (booster && upper) {
-      // Stage separation sequence occurs around 40% into Scene 2
-      if (p > 0.35) {
-        const sepProgress = (p - 0.35) / 0.65;
+      // Stage separation sequence occurs around 32% into Scene 2
+      if (p > 0.32) {
+        this.isSeparating.set(p < 0.62);
+        if (!this.hasPlayedSeparationAudio && p >= 0.33) {
+          this.hasPlayedSeparationAudio = true;
+          this.audio.playBeep(1450, 0.15);
+        }
+
+        const sepProgress = (p - 0.32) / 0.68;
+        // Physical booster tumble away downwards and left with negative pitch
         gsap.set(booster, {
-          y: sepProgress * 320,
-          x: sepProgress * -140, // Tumbles to side
-          rotate: sepProgress * -45,
-          opacity: Math.max(0, 1 - sepProgress * 1.3),
+          y: sepProgress * 360,
+          x: sepProgress * -150,
+          rotate: sepProgress * -42,
+          opacity: Math.max(0, 1 - sepProgress * 1.25),
         });
 
-        // Upper stage accelerates forward
+        // Pitch maneuver: Upper stage rotates towards 28.5deg orbital inclination vector
+        const pitchAngle = Math.min(28.5, sepProgress * 32);
+        const downrangeX = sepProgress * 150;
+        const orbitalY = -sepProgress * 130;
+
         gsap.set(upper, {
-          y: sepProgress * -120,
-          scale: 1 + sepProgress * 0.15,
+          x: downrangeX,
+          y: orbitalY,
+          rotate: pitchAngle,
+          scale: 1 + sepProgress * 0.14,
         });
       } else {
+        this.isSeparating.set(false);
+        if (p < 0.2) {
+          this.hasPlayedSeparationAudio = false;
+        }
         gsap.set(booster, { y: 0, x: 0, rotate: 0, opacity: 1 });
-        gsap.set(upper, { y: 0, scale: 1 });
+        gsap.set(upper, { x: 0, y: 0, rotate: 0, scale: 1 });
       }
     }
 

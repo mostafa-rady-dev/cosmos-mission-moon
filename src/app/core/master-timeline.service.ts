@@ -9,11 +9,9 @@ export interface SceneRange {
 }
 
 export const SCENE_SEGMENTS: SceneRange[] = [
-  { id: 'launch', name: 'Launch Pad', start: 0.0, end: 0.15, index: 0 },
-  { id: 'orbit', name: 'Atmosphere & Orbit', start: 0.15, end: 0.30, index: 1 },
-  { id: 'solar-system', name: 'Solar System Flight', start: 0.30, end: 0.60, index: 2 },
-  { id: 'moon-landing', name: 'Moon Approach & Landing', start: 0.60, end: 0.75, index: 3 },
-  { id: 'moon-explore', name: 'Moon Surface & Missions', start: 0.75, end: 1.0, index: 4 },
+  { id: 'launch', name: 'Launch Pad', start: 0.0, end: 0.12, index: 0 },
+  { id: 'orbit', name: 'Atmosphere & Orbit', start: 0.12, end: 0.22, index: 1 },
+  { id: 'solar-system', name: 'Relic Odyssey Flight', start: 0.22, end: 1.0, index: 2 },
 ];
 
 @Injectable({

@@ -127,7 +127,7 @@ import { AudioService } from '../../core/audio.service';
       height: 320px;
       bottom: 10%;
       left: 45%;
-      background: radial-gradient(circle, var(--accent-sand) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
       opacity: 0.15;
     }
 
@@ -169,9 +169,9 @@ import { AudioService } from '../../core/audio.service';
       display: inline-block;
       width: 8px;
       height: 8px;
-      background: var(--accent-sand);
+      background: var(--accent-glow);
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent-sand);
+      box-shadow: 0 0 8px var(--accent-glow);
       animation: pulse 1.5s infinite;
     }
 
@@ -275,7 +275,7 @@ import { AudioService } from '../../core/audio.service';
     }
 
     .telemetry-value {
-      color: var(--accent-sand);
+      color: var(--accent-glow);
       font-weight: 700;
     }
 

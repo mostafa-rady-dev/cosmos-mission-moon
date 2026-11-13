@@ -6,48 +6,6 @@
 
 <!-- Main Experience Container -->
 <div class="experience-shell">
-  <!-- Top Navigation HUD / Boarding Header -->
-  <header class="hud-header" role="banner">
-    <!-- Skip to missions accessibility link -->
-    <a 
-      href="#missions-section" 
-      class="skip-link"
-      (click)="$event.preventDefault(); skipToMissions()"
-    >
-      {{ i18n.currentTranslations().skipToMissions }}
-    </a>
-
-    <!-- Left (in LTR) / Right (in RTL): Space Center Badge -->
-    <div class="facility-identity">
-      <div class="facility-logo">
-        <svg viewBox="0 0 32 32" class="facility-logo-svg" fill="none">
-          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/>
-          <path d="M16 6L20 18H12L16 6Z" fill="var(--accent-glow)"/>
-          <circle cx="16" cy="22" r="2.5" fill="var(--accent-sand)"/>
-        </svg>
-      </div>
-      <div class="facility-text">
-        <span class="facility-title">{{ i18n.currentTranslations().siteTitle }}</span>
-        <span class="facility-sub">{{ i18n.currentTranslations().subTitle }}</span>
-      </div>
-    </div>
-
-    <!-- Center Coordinates Badge (Boarding Pass Detail) -->
-    <div class="header-coordinates">
-      <span class="coord-tag">LOC // ASYUT-EG</span>
-      <span class="coord-value">{{ i18n.currentTranslations().coordinates }}</span>
-    </div>
-
-    <!-- Right (in LTR) / Left (in RTL): Controls (Sound + Lang) -->
-    <div class="header-controls">
-      <button class="skip-btn" (click)="skipToMissions()">
-        {{ i18n.currentTranslations().skipToMissions }}
-      </button>
-      <app-sound-toggle></app-sound-toggle>
-      <app-language-toggle></app-language-toggle>
-    </div>
-  </header>
-
   <!-- Phase 8: Vertical Side Progress Dock with Traveling Rocket -->
   <app-progress-rocket></app-progress-rocket>
 
@@ -71,32 +29,14 @@
       <app-orbit></app-orbit>
     </div>
 
-    <!-- Scene 3: Solar System Flight (Active in Phase 3: 30% - 60%) -->
+    <!-- Scene 3: Relic Odyssey Flight Corridor (Active in Phase 3: 22% - 100%) -->
     <div 
       class="scene-wrapper"
       [class.scene-active]="masterTimeline.activeSceneIndex() === 2"
       [style.opacity]="masterTimeline.getSceneVisibility(2).opacity"
-    >
-      <app-solar-system></app-solar-system>
-    </div>
-
-    <!-- Scene 4: Moon Approach & Landing (Active in Phase 4: 60% - 75%) -->
-    <div 
-      class="scene-wrapper"
-      [class.scene-active]="masterTimeline.activeSceneIndex() === 3"
-      [style.opacity]="masterTimeline.getSceneVisibility(3).opacity"
-    >
-      <app-moon-landing></app-moon-landing>
-    </div>
-
-    <!-- Scene 5 & 6: Astronaut Emerges & Moon Exploration (Active in Phase 5 & 6: 75% - 100%) -->
-    <div 
-      class="scene-wrapper"
-      [class.scene-active]="masterTimeline.activeSceneIndex() === 4"
-      [style.opacity]="masterTimeline.getSceneVisibility(4).opacity"
       id="missions-section"
     >
-      <app-moon-explore (openMission)="openMissionModal($event)"></app-moon-explore>
+      <app-solar-system (openMission)="openMissionModal($event)"></app-solar-system>
     </div>
   </main>
 
@@ -106,6 +46,29 @@
     (closeModalEvent)="closeMissionModal()"
     (missionCompletedEvent)="onMissionCompleted($event)"
   ></app-hud-modal>
+
+  <!-- Phase 3: Five-Step Space Explorer Passport Modal -->
+  <app-explorer-passport
+    [isOpen]="isPassportOpen()"
+    (closeModal)="closePassport()"
+  ></app-explorer-passport>
+
+  <!-- Phase 4: Mission Control Center Modal -->
+  <app-mission-control
+    [isOpen]="isMissionControlOpen()"
+    (closeModal)="closeMissionControl()"
+    (launchMissionEvent)="launchMissionFromControl($event)"
+  ></app-mission-control>
+
+  <!-- Phase 4: Personal Explorer Profile & Achievements Modal -->
+  <app-explorer-profile
+    [isOpen]="isExplorerProfileOpen()"
+    (closeModal)="closeExplorerProfile()"
+    (openPassportEvent)="openPassport()"
+  ></app-explorer-profile>
+
+  <!-- Phase 4: Real-time Achievement Unlocked Toast Notification -->
+  <app-achievement-toast></app-achievement-toast>
 
   <!-- Master Scroll Track Driving ScrollTrigger (600vh height for silky smooth travel) -->
   <div #masterTrack class="master-scroll-track" aria-hidden="true"></div>

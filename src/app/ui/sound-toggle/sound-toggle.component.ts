@@ -39,8 +39,11 @@ import { I18nService } from '../../core/i18n.service';
     .sound-btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 0.45rem;
-      padding: 0.45rem 0.65rem;
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0.45rem 0.75rem;
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
@@ -52,10 +55,10 @@ import { I18nService } from '../../core/i18n.service';
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 
       &:hover {
-        background: rgba(42, 113, 214, 0.2);
+        background: rgba(102, 87, 245, 0.2);
         border-color: var(--accent-glow);
         transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(42, 113, 214, 0.35);
+        box-shadow: 0 6px 18px rgba(102, 87, 245, 0.35);
       }
 
       &:active {

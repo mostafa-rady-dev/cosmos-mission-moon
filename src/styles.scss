@@ -35,7 +35,7 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent-glow);
   outline-offset: 3px;
-  box-shadow: 0 0 12px rgba(112, 177, 237, 0.6);
+  box-shadow: 0 0 14px rgba(54, 197, 240, 0.6);
 }
 
 /* Custom Scrollbar */
@@ -46,11 +46,11 @@ body {
   background: var(--bg-deep);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(112, 177, 237, 0.25);
+  background: rgba(54, 197, 240, 0.25);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(112, 177, 237, 0.5);
+  background: rgba(54, 197, 240, 0.5);
 }
 
 /* Cinematic Film Grain & Scanline Overlays */
@@ -70,7 +70,7 @@ body {
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-line-strong);
   border-radius: 12px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .hud-panel-elevated {
@@ -78,10 +78,10 @@ body {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-accent);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6), var(--hud-glow);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), var(--hud-glow);
 }
 
-/* Passport / Boarding Pass Ticket Aesthetic */
+/* Boarding Pass / Passport Badge Aesthetic */
 .passport-badge {
   display: inline-flex;
   align-items: center;
@@ -91,15 +91,27 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent-sand);
-  background: rgba(242, 202, 141, 0.08);
-  border: 1px dashed rgba(242, 202, 141, 0.35);
+  color: var(--accent-glow);
+  background: rgba(54, 197, 240, 0.08);
+  border: 1px dashed rgba(54, 197, 240, 0.35);
   border-radius: 4px;
 }
 
 .telemetry-mono {
   font-family: var(--font-mono);
   letter-spacing: 0.05em;
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+/* Direction-safe coordinate wrapper for RTL/LTR parity */
+.geo-coord,
+.telemetry-num {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  font-family: var(--font-mono);
 }
 
 /* Buttons */
@@ -114,27 +126,27 @@ body {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-primary);
-  background: linear-gradient(135deg, rgba(42, 113, 214, 0.85) 0%, rgba(22, 29, 57, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(102, 87, 245, 0.9) 0%, rgba(17, 26, 53, 0.95) 100%);
   border: 1px solid var(--accent-glow);
   border-radius: 999px;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.3s var(--ease-cinematic);
-  box-shadow: 0 8px 24px rgba(42, 113, 214, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 24px rgba(102, 87, 245, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   overflow: hidden;
 
   &::before {
     content: '';
     position: absolute;
     inset: -50%;
-    background: radial-gradient(circle, rgba(112, 177, 237, 0.4) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(54, 197, 240, 0.4) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.3s ease;
   }
 
   &:hover {
     transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 12px 32px rgba(42, 113, 214, 0.5), 0 0 20px rgba(112, 177, 237, 0.4);
+    box-shadow: 0 12px 32px rgba(102, 87, 245, 0.55), 0 0 20px rgba(54, 197, 240, 0.5);
     border-color: #fff;
 
     &::before {
@@ -144,6 +156,49 @@ body {
 
   &:active {
     transform: translateY(1px) scale(0.99);
+  }
+}
+
+.btn-secondary-deck {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.35rem;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(54, 197, 240, 0.35);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s var(--ease-cinematic);
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    border-color: var(--accent-glow);
+    background: rgba(17, 26, 53, 0.92);
+    box-shadow: 0 0 20px rgba(54, 197, 240, 0.35);
+    transform: translateY(-2px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+.cta-actions-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
   }
 }
 
@@ -180,4 +235,173 @@ body {
   .dust-puff {
     animation: none !important;
   }
+}
+
+/* Global Shared Modal & HUD Keyframes */
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes visorExpand {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulseAnim {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+}
+
+@keyframes spinScanner {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Countdown HUD Overlay Utility */
+.countdown-hud-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 11, 26, 0.45);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.countdown-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.2rem 3rem;
+  background: rgba(17, 26, 53, 0.88);
+  border: 2px solid var(--accent-glow);
+  border-radius: 20px;
+  box-shadow: 0 0 45px rgba(54, 197, 240, 0.4);
+  animation: scalePop 0.3s var(--ease-elastic);
+}
+
+.countdown-badge {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-glow);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+.countdown-number {
+  font-family: var(--font-mono);
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 0 30px var(--accent-glow), 0 0 60px var(--accent-primary);
+
+  &.countdown-liftoff {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #F27636;
+    text-shadow: 0 0 35px #F27636;
+  }
+}
+
+.countdown-telemetry {
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-success);
+  letter-spacing: 0.08em;
+}
+
+/* Launch Pad Specific Shared FX Keyframes */
+@keyframes jetBlast { 0% { transform: translateX(-50%) scale(0.95, 0.92); opacity: 0.9; } 100% { transform: translateX(-50%) scale(1.05, 1.08); opacity: 1; } }
+@keyframes flarePulse { 0% { transform: translateX(-50%) scale(0.95); opacity: 0.75; } 100% { transform: translateX(-50%) scale(1.1); opacity: 0.95; } }
+@keyframes heatGlowPulse { 0% { opacity: 0.7; transform: translateX(-50%) scale(0.95); } 100% { opacity: 1; transform: translateX(-50%) scale(1.06); } }
+@keyframes smokeRoll { 0% { transform: translate(0, 0) scale(0.8); opacity: 0.8; } 100% { transform: translate(90px, -20px) scale(1.6); opacity: 0; } }
+@keyframes corePlumeRoar { 0% { transform: scaleY(0.94); } 100% { transform: scaleY(1.08); } }
+@keyframes thrusterPuff { 0% { transform: scaleY(0.92); opacity: 0.88; } 100% { transform: scaleY(1.1); opacity: 1; } }
+@keyframes beaconFlash { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+@keyframes rocketRumble { 0% { transform: translate(-1.5px, 1px) rotate(-0.3deg); } 100% { transform: translate(1.5px, -1.2px) rotate(0.3deg); } }
+@keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.05); opacity: 0.6; } }
+@keyframes bounceArrow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+@keyframes scalePop { 0% { transform: scale(0.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes loxDriftLeft { 0% { transform: translate(0, 0) scale(0.6); opacity: 0.8; } 100% { transform: translate(-38px, 12px) scale(1.8); opacity: 0; } }
+@keyframes loxDriftRight { 0% { transform: translate(0, 0) scale(0.6); opacity: 0.8; } 100% { transform: translate(38px, 12px) scale(1.8); opacity: 0; } }
+@keyframes machDiamondPulse {
+  0%, 100% { transform: scaleX(1) scaleY(1); opacity: 0.85; filter: drop-shadow(0 0 10px #36C5F0); }
+  50% { transform: scaleX(1.15) scaleY(0.92); opacity: 1; filter: drop-shadow(0 0 18px #fff) drop-shadow(0 0 28px #36C5F0); }
+}
+
+@keyframes spotlightFlicker {
+  0%, 100% { opacity: 0.82; transform: rotate(0deg); }
+  35% { opacity: 0.95; transform: rotate(0.4deg); }
+  70% { opacity: 0.78; transform: rotate(-0.3deg); }
+}
+
+@keyframes vaporDrift {
+  0% { transform: translateY(0) scale(1) translateX(0); opacity: 0.75; }
+  50% { transform: translateY(18px) scale(1.45) translateX(-8px); opacity: 0.45; }
+  100% { transform: translateY(40px) scale(2.1) translateX(-18px); opacity: 0; }
+}
+
+@keyframes thrusterPulse {
+  0%, 100% { transform: scaleY(1); opacity: 0.9; }
+  50% { transform: scaleY(1.18); opacity: 1; filter: drop-shadow(0 0 20px #36C5F0) drop-shadow(0 0 35px #6657F5); }
+}
+
+@keyframes lidarSweep {
+  0% { transform: rotate(-15deg); opacity: 0.6; }
+  50% { transform: rotate(15deg); opacity: 0.95; }
+  100% { transform: rotate(-15deg); opacity: 0.6; }
+}
+
+@keyframes holographicFlicker {
+  0%, 100% { opacity: 0.96; }
+  25% { opacity: 0.88; }
+  26% { opacity: 1; }
+  72% { opacity: 0.91; }
+}
+
+@keyframes heatShimmerWave {
+  0% { transform: scaleY(1) translateY(0); filter: blur(2px); }
+  50% { transform: scaleY(1.25) translateY(4px); filter: blur(4px); }
+  100% { transform: scaleY(1) translateY(0); filter: blur(2px); }
+}
+
+/* Lunar Surface Traverse Keyframes */
+@keyframes naturalShadowLope {
+  0% { transform: translateX(-50%) scale(1.05, 1); opacity: 0.9; filter: blur(2px); }
+  14% { transform: translateX(-50%) scale(0.9, 0.9); opacity: 0.75; filter: blur(3px); }
+  38% { transform: translateX(-50%) scale(0.55, 0.6); opacity: 0.35; filter: blur(7px); }
+  54% { transform: translateX(-50%) scale(0.85, 0.85); opacity: 0.7; filter: blur(3.5px); }
+  62% { transform: translateX(-50%) scale(1.05, 1); opacity: 0.9; filter: blur(2px); }
+  74% { transform: translateX(-50%) scale(0.92, 0.9); opacity: 0.75; filter: blur(3px); }
+  87% { transform: translateX(-50%) scale(0.58, 0.6); opacity: 0.38; filter: blur(6.5px); }
+  100% { transform: translateX(-50%) scale(1.05, 1); opacity: 0.9; filter: blur(2px); }
+}
+
+@keyframes naturalDustKickLeft {
+  0% { opacity: 0.85; transform: translate(0, 0) scale(0.6); }
+  18% { opacity: 0.7; transform: translate(-14px, -12px) scale(1.4); }
+  32% { opacity: 0; transform: translate(-24px, -18px) scale(2); }
+  33%, 100% { opacity: 0; }
+}
+
+@keyframes naturalDustKickRight {
+  0%, 60% { opacity: 0; }
+  62% { opacity: 0.85; transform: translate(0, 0) scale(0.6); }
+  78% { opacity: 0.7; transform: translate(-14px, -12px) scale(1.4); }
+  92% { opacity: 0; transform: translate(-24px, -18px) scale(2); }
+  100% { opacity: 0; }
+}
+
+@keyframes visorGlint {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes beaconPing {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
 }

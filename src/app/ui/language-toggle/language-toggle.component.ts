@@ -31,7 +31,8 @@ import { AudioService } from '../../core/audio.service';
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.4rem 0.85rem;
+      min-height: 44px;
+      padding: 0.45rem 0.95rem;
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
@@ -46,10 +47,10 @@ import { AudioService } from '../../core/audio.service';
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 
       &:hover {
-        background: rgba(42, 113, 214, 0.2);
+        background: rgba(102, 87, 245, 0.2);
         border-color: var(--accent-glow);
         transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(42, 113, 214, 0.35);
+        box-shadow: 0 6px 18px rgba(102, 87, 245, 0.35);
 
         .globe-icon {
           color: var(--accent-glow);
@@ -65,7 +66,7 @@ import { AudioService } from '../../core/audio.service';
     .globe-icon {
       display: flex;
       align-items: center;
-      color: var(--accent-sand);
+      color: var(--accent-glow);
       transition: transform 0.3s ease, color 0.3s ease;
     }
 
@@ -82,9 +83,9 @@ import { AudioService } from '../../core/audio.service';
       font-size: 0.65rem;
       font-weight: 700;
       padding: 0.15rem 0.35rem;
-      background: rgba(227, 232, 239, 0.12);
+      background: rgba(244, 245, 255, 0.12);
       border-radius: 4px;
-      color: var(--accent-sand);
+      color: var(--accent-glow);
     }
   `]
 })
